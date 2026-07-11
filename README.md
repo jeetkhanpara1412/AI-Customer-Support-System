@@ -1,91 +1,175 @@
-# Multi-Domain Support Triage Agent
+# 🤖 AI Customer Support Ticket Classification System
 
-A terminal-based AI system that processes support tickets across multiple domains and intelligently decides whether to respond or escalate based on risk and confidence.
+An AI-powered customer support ticket classification system built using **Python**, **Scikit-learn**, **Natural Language Processing (NLP)**, **TF-IDF**, **Logistic Regression**, and **Cosine Similarity**.
 
----
-
-## 🚀 Overview
-
-This project simulates a real-world support triage system. It classifies user issues, retrieves relevant documentation, and ensures safe handling by prioritizing escalation for sensitive or low-confidence cases.
+The system automatically classifies customer support requests, retrieves the most similar historical ticket, and generates a professional support response.
 
 ---
 
-## ⚙️ Features
+## Features
 
-* 🔍 Rule-based issue classification
-* 🧠 Product detection (HackerRank, Claude, Visa)
-* 📄 TF-IDF based document retrieval
-* ⚠️ Safety-first decision engine
-* ❌ No hallucination (uses only provided data)
-* 📝 Detailed logging (log.txt)
-* 📊 Structured output (output.csv)
-
----
-
-## 🧩 System Pipeline
-
-Read → Classify → Retrieve → Decide → Respond → Log
+- AI-powered support ticket classification
+- Natural Language Processing (NLP)
+- TF-IDF text vectorization
+- Logistic Regression classifier
+- Cosine Similarity-based ticket retrieval
+- Automatic support response generation
+- Intelligent fallback responses
+- Modular Python architecture
+- Command-line chatbot interface
+- Conversation logging
+- Unit testing
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-* Python
-* scikit-learn (TF-IDF, cosine similarity)
+- Python
+- Scikit-learn
+- Natural Language Processing
+- TF-IDF Vectorization
+- Logistic Regression
+- Cosine Similarity
+- CSV Knowledge Base
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
+```text
+AI-Customer-Support-System/
+│
+├── main.py
+├── classifier.py
+├── retriever.py
+├── responder.py
+├── decision.py
+├── logger.py
+├── knowledge_base.csv
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── test_support_system.py
 ```
-main.py
-classifier.py
-retriever.py
-decision.py
-responder.py
-logger.py
+
+---
+
+## Workflow
+
+Customer Message
+
+↓
+
+Text Preprocessing
+
+↓
+
+TF-IDF Vectorization
+
+↓
+
+Logistic Regression Classification
+
+↓
+
+Predict Support Category
+
+↓
+
+Cosine Similarity Retrieval
+
+↓
+
+Generate Professional Company Response
+
+↓
+
+Display Final Response
+
+---
+
+## Supported Categories
+
+- Account Access
+- Billing
+- Refund
+- Technical Issue
+- Payment Issue
+- Order / Delivery
+- Account Management
+- Security / Fraud
+- General Inquiry
+
+---
+
+## Example
+
+Customer
+
+```text
+I forgot my password and cannot log in.
+```
+
+Support
+
+```text
+We're sorry you're having trouble signing in.
+Please use the "Forgot Password" option to reset your password.
+If the issue continues, please contact our support team.
 ```
 
 ---
 
-## ▶️ How to Run
+## Installation
+
+```bash
+git clone https://github.com/yourusername/AI-Customer-Support-System.git
+
+cd AI-Customer-Support-System
+
+pip install -r requirements.txt
+```
+
+---
+
+## Run
 
 ```bash
 python main.py
 ```
 
----
+or
 
-## 🧠 Design Decisions
-
-* Used TF-IDF for lightweight offline retrieval
-* Implemented rule-based classification for simplicity
-* Designed safety-first logic to avoid incorrect responses
-* Escalates high-risk or low-confidence cases
+```bash
+python main.py "I forgot my password"
+```
 
 ---
 
-## ⚠️ Limitations
+## Testing
 
-* Limited semantic understanding (keyword-based)
-* May escalate more queries due to strict safety rules
-
----
-
-## 🚀 Future Improvements
-
-* Use semantic embeddings for better matching
-* Improve classification with NLP models
-* Add tiered confidence handling
+```bash
+python test_support_system.py
+```
 
 ---
 
-## 💡 Key Insight
+## Future Improvements
 
-This system is designed to **prioritize safety over incorrect answers**, which is critical in real-world support systems.
+- Transformer models (BERT)
+- Retrieval-Augmented Generation (RAG)
+- FastAPI REST API
+- Web-based chat interface
+- Database integration
+- Docker deployment
+- Multi-language support
+- Voice support
+- Real-time analytics
 
 ---
 
-## 📌 Author
+## Author
 
-Developed as part of a support triage challenge.
+Jeet Khanpara
+
+MCA Student | Python Developer | Machine Learning Enthusiast
