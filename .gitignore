@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.csv.tmp
+.env
+.venv/
+venv/
+.idea/
+.vscode/
+.pytest_cache/
+.mypy_cache/
+.coverage
+dist/
+build/
+output.csv
+support_triage_log.txt
