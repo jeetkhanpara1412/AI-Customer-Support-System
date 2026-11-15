@@ -2,8 +2,9 @@ import csv
 import hashlib
 import json
 import threading
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
+from redis import Redis
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -16,9 +17,8 @@ from app.ml.intents import IntentPrediction, predict_intent
 from app.ml.responder import ResponseGenerator
 from app.ml.retriever import TicketRetriever
 from app.ml.train import DATA_PATH, ensure_model, train_pipeline
-from app.services.ticket_service import create_escalation_ticket
 from app.services.conversation_memory import resolve_follow_up
-from redis import Redis
+from app.services.ticket_service import create_escalation_ticket
 
 _lock = threading.RLock()
 _classifier: SupportCategoryClassifier | None = None
@@ -174,7 +174,7 @@ def process_chat(db: Session, user: User, text: str, conversation_id: int | None
 
     conversation.current_topic = category
     conversation.pending_clarification = options if mode == "clarify" else None
-    conversation.updated_at = datetime.now(timezone.utc)
+    conversation.updated_at = datetime.now(UTC)
     user_message = Message(conversation_id=conversation.id, sender="user", body=clean_text)
     assistant_message = Message(
         conversation_id=conversation.id,

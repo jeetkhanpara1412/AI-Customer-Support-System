@@ -6,7 +6,7 @@ import numpy as np
 from scipy.sparse import csr_matrix, hstack
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from app.ml.embeddings import Encoder, MODEL_NAME, encode_texts, get_encoder
+from app.ml.embeddings import MODEL_NAME, Encoder, encode_texts, get_encoder
 from app.ml.preprocess import correct_common_typos, preprocess_text
 
 ARTIFACT_PATH = Path(__file__).parent / "artifacts" / "support_classifier.joblib"

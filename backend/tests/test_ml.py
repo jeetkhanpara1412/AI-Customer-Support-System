@@ -1,8 +1,8 @@
-from app.ml.train import train_pipeline
 from app.ml.decision import DecisionEngine
 from app.ml.intents import explicit_intent
-from app.ml.retriever import KnowledgeRow, TicketRetriever
 from app.ml.responder import ResponseGenerator
+from app.ml.retriever import KnowledgeRow, TicketRetriever
+from app.ml.train import train_pipeline
 
 
 class FakeEncoder:

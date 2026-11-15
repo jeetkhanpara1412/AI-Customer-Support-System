@@ -17,10 +17,6 @@ class Settings(BaseSettings):
     answer_confidence_threshold: float = 0.60
     answer_similarity_threshold: float = 0.45
     clarify_confidence_threshold: float = 0.35
-    llm_enabled: bool = False
-    llm_api_key: str | None = None
-    llm_model: str = "gpt-4o-mini"
-    llm_timeout_seconds: float = 12.0
     first_admin_email: str | None = None
     first_admin_password: str | None = None
 

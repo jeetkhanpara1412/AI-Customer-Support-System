@@ -4,13 +4,13 @@ from pathlib import Path
 
 import joblib
 from sklearn.calibration import CalibratedClassifierCV
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from app.ml.classifier import hybrid_features
-from app.ml.embeddings import Encoder, MODEL_NAME, get_encoder
+from app.ml.embeddings import MODEL_NAME, Encoder, get_encoder
 from app.ml.preprocess import correct_common_typos
 
 DATA_PATH = Path(__file__).parents[2] / "data" / "knowledge_base.csv"

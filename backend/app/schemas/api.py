@@ -1,8 +1,15 @@
 import re
-from typing import Literal
 from datetime import datetime
+from typing import Literal
 
-from pydantic import AliasChoices, BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import (
+    AliasChoices,
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    field_validator,
+)
 
 
 class RegisterRequest(BaseModel):
@@ -132,23 +139,6 @@ class KnowledgeEntryCreate(BaseModel):
     message: str = Field(min_length=3, max_length=1000)
     category: str = Field(min_length=1, max_length=64)
     response: str = Field(min_length=3, max_length=2000)
-
-
-class KnowledgeEntryRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    id: int
-    message: str
-    category: str
-    response: str
-    enabled: bool
-
-
-class AdminStats(BaseModel):
-    open_tickets: int
-    resolved_today: int
-    escalation_rate: float
-    avg_confidence: float
-    by_category: list[dict[str, str | int]]
 
 
 TicketRead.model_rebuild()

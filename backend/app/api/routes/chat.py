@@ -6,7 +6,12 @@ from app.api.deps import get_current_user
 from app.core.rate_limit import limiter
 from app.db.models import Conversation, User
 from app.db.session import get_db
-from app.schemas.api import ChatRequest, ChatResponse, ConversationRead, ConversationSummary
+from app.schemas.api import (
+    ChatRequest,
+    ChatResponse,
+    ConversationRead,
+    ConversationSummary,
+)
 from app.services.chat_service import process_chat
 
 router = APIRouter(tags=["chat"])

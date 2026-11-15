@@ -6,7 +6,6 @@ from uuid import uuid4
 import httpx
 import websockets
 
-
 BASE_URL = os.getenv("SMOKE_BASE_URL", "http://127.0.0.1:8000")
 WS_URL = BASE_URL.replace("https://", "wss://").replace("http://", "ws://") + "/ws/chat"
 

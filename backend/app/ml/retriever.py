@@ -2,14 +2,14 @@ import csv
 import hashlib
 import os
 import tempfile
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 
 import joblib
 import numpy as np
 
-from app.ml.embeddings import Encoder, MODEL_NAME, encode_texts
+from app.ml.embeddings import MODEL_NAME, Encoder, encode_texts
 from app.ml.preprocess import correct_common_typos
 
 EMBEDDING_CACHE_PATH = Path(__file__).parent / "artifacts" / "knowledge_embeddings.joblib"
@@ -67,10 +67,10 @@ class TicketRetriever:
         for item in source:
             rows.append(
                 KnowledgeRow(
-                    id=int(getattr(item, "id")),
-                    message=str(getattr(item, "message")).strip(),
-                    category=str(getattr(item, "category")).strip(),
-                    response=str(getattr(item, "response")).strip(),
+                    id=int(item.id),
+                    message=str(item.message).strip(),
+                    category=str(item.category).strip(),
+                    response=str(item.response).strip(),
                 )
             )
         return [row for row in rows if row.message and row.category and row.response]

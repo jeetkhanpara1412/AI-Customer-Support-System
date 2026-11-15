@@ -1,4 +1,4 @@
-from datetime import datetime, time, timezone
+from datetime import UTC, datetime, time
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -6,13 +6,22 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import require_admin
-from app.db.models import Conversation, KnowledgeEntry, Message, Ticket, TicketReply, User
+from app.db.models import (
+    Conversation,
+    KnowledgeEntry,
+    Message,
+    Ticket,
+    TicketReply,
+    User,
+)
 from app.db.session import get_db
 from app.schemas.api import (
     KnowledgeEntryCreate,
     TicketRead,
-    TicketReply as TicketReplyRequest,
     TicketStatusUpdate,
+)
+from app.schemas.api import (
+    TicketReply as TicketReplyRequest,
 )
 from app.services.chat_service import rebuild_knowledge_base
 from app.services.ws_manager import manager
@@ -79,8 +88,8 @@ async def reply_ticket(ticket_id: int, payload: TicketReplyRequest, user: User =
 
 @router.get("/stats")
 def stats(_: User = Depends(require_admin), db: Session = Depends(get_db)):
-    now = datetime.now(timezone.utc)
-    start_of_day = datetime.combine(now.date(), time.min, tzinfo=timezone.utc)
+    now = datetime.now(UTC)
+    start_of_day = datetime.combine(now.date(), time.min, tzinfo=UTC)
     open_tickets = db.scalar(select(func.count(Ticket.id)).where(Ticket.status == "open")) or 0
     resolved_today = db.scalar(
         select(func.count(Ticket.id)).where(

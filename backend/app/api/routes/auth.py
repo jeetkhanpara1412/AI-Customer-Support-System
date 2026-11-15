@@ -1,5 +1,5 @@
 import hmac
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
@@ -8,8 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user
 from app.core.config import get_settings
-from app.core.rate_limit import limiter
-from app.core.rate_limit import enforce_email_limit
+from app.core.rate_limit import enforce_email_limit, limiter
 from app.core.security import (
     create_access_token,
     create_refresh_token,
@@ -61,10 +60,10 @@ def login(request: Request, response: Response, payload: LoginRequest, db: Sessi
     user = db.scalar(select(User).where(User.email == email))
     password_hash = user.password_hash if user else _dummy_password_hash
     valid_password = verify_password(payload.password, password_hash)
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     locked_until = user.locked_until if user else None
     if locked_until and locked_until.tzinfo is None:
-        locked_until = locked_until.replace(tzinfo=timezone.utc)
+        locked_until = locked_until.replace(tzinfo=UTC)
     locked = bool(locked_until and locked_until > now)
     if user is None or not valid_password or locked:
         if user and not locked:

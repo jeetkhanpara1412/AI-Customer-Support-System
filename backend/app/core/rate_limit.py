@@ -1,15 +1,14 @@
-from slowapi import Limiter
-import jwt
-from fastapi import Request
-from redis import Redis
-
-from app.core.security import decode_token
-from app.core.config import get_settings
-from app.core.logging import logger
 import hashlib
 import threading
 
-from fastapi import HTTPException
+import jwt
+from fastapi import HTTPException, Request
+from redis import Redis
+from slowapi import Limiter
+
+from app.core.config import get_settings
+from app.core.logging import logger
+from app.core.security import decode_token
 
 _local_email_attempts: dict[str, int] = {}
 _local_email_lock = threading.Lock()
