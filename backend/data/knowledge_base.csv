@@ -1,4 +1,4 @@
-﻿Customer Message,Category,Company Response
+Customer Message,Category,Company Response
 I want to cancel my subscription.,Billing,"We're sorry to see you go. You can cancel your subscription from Account → Subscription Settings. If you need additional help, please contact our billing team."
 Cancel my membership.,Billing,"We're sorry to see you go. You can cancel your subscription from Account → Subscription Settings. If you need additional help, please contact our billing team."
 Stop charging my card.,Billing,"We're sorry to see you go. You can cancel your subscription from Account → Subscription Settings. If you need additional help, please contact our billing team."
@@ -29,20 +29,20 @@ I cannot remember my password.,Account Access,"We're sorry you're having trouble
 The sign in page keeps failing.,Account Access,"We're sorry you're having trouble signing in. Please use the Forgot Password option to reset your password. If you still cannot access your account, contact our support team."
 I cannot log into my account.,Account Access,"We're sorry you're having trouble signing in. Please use the Forgot Password option to reset your password. If you still cannot access your account, contact our support team."
 I need access to my account.,Account Access,"We're sorry you're having trouble signing in. Please use the Forgot Password option to reset your password. If you still cannot access your account, contact our support team."
-Refund my payment.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-Where is my refund?,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-I want my money back.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-Please refund my order.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-Process my refund.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-Refund my purchase.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-When will I get my refund?,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-My refund is late.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-I need a refund.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-Refund my money.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-Can you refund my purchase?,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-I would like a refund.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-Please return my money.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
-My payment should be refunded.,Refund,"We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days."
+Refund my payment.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+Where is my refund?,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+I want my money back.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+Please refund my order.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+Process my refund.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+Refund my purchase.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+When will I get my refund?,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+My refund is late.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+I need a refund.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+Refund my money.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+Can you refund my purchase?,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+I would like a refund.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+Please return my money.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
+My payment should be refunded.,Refund,We're sorry for the inconvenience. Your refund request has been received. Our team will review it and update you within 3–5 business days.
 The app crashes.,Technical Issue,"We're sorry you're experiencing a technical issue. Please restart the application and update it to the latest version. If the problem continues, our technical team will investigate."
 The system is not working.,Technical Issue,"We're sorry you're experiencing a technical issue. Please restart the application and update it to the latest version. If the problem continues, our technical team will investigate."
 The website is down.,Technical Issue,"We're sorry you're experiencing a technical issue. Please restart the application and update it to the latest version. If the problem continues, our technical team will investigate."
@@ -73,36 +73,36 @@ The payment page keeps loading.,Payment Issue,"We're sorry about the payment pro
 The card was rejected.,Payment Issue,"We're sorry about the payment problem. Please verify your payment details and try again. If the charge still fails, our support team can help."
 My bank blocked the charge.,Payment Issue,"We're sorry about the payment problem. Please verify your payment details and try again. If the charge still fails, our support team can help."
 I need help with a failed payment.,Payment Issue,"We're sorry about the payment problem. Please verify your payment details and try again. If the charge still fails, our support team can help."
-Order not delivered.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-Package delayed.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-My order is late.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-Where is my package?,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-Tracking not updated.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-The package is missing.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-Delivery is delayed.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-Order stuck in transit.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-My delivery is late.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-The package has not arrived.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-The shipment is delayed.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-My parcel is missing.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-The order is stuck.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-The delivery company lost my order.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-The package arrived late.,Order / Delivery,"We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected."
-Someone hacked my account.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-Unauthorized login.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-Suspicious activity on my account.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-I think my account was compromised.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-A fraudulent charge appeared.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-I noticed unauthorized access.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-My account seems hacked.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-Someone used my card without permission.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-There is suspicious login activity.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-I need help with fraud.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-I think someone logged in to my account.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-My account was accessed from another device.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-I saw an unknown transaction.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-My card was charged by someone else.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
-I need urgent help with security.,Security / Fraud,"We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance."
+Order not delivered.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+Package delayed.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+My order is late.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+Where is my package?,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+Tracking not updated.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+The package is missing.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+Delivery is delayed.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+Order stuck in transit.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+My delivery is late.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+The package has not arrived.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+The shipment is delayed.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+My parcel is missing.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+The order is stuck.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+The delivery company lost my order.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+The package arrived late.,Order / Delivery,We're sorry about the order or delivery issue. Please confirm your shipping details and contact support if your order has not arrived as expected.
+Someone hacked my account.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+Unauthorized login.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+Suspicious activity on my account.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+I think my account was compromised.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+A fraudulent charge appeared.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+I noticed unauthorized access.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+My account seems hacked.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+Someone used my card without permission.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+There is suspicious login activity.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+I need help with fraud.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+I think someone logged in to my account.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+My account was accessed from another device.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+I saw an unknown transaction.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+My card was charged by someone else.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
+I need urgent help with security.,Security / Fraud,We're sorry you're dealing with a security concern. Please secure your account immediately and contact our support team for urgent assistance.
 Update my email.,Account Management,"We're sorry for the inconvenience. You can update your email address from your account settings. If you need help, our support team can assist."
 Change phone number.,Account Management,"We're sorry for the inconvenience. You can update your email address from your account settings. If you need help, our support team can assist."
 Update my profile.,Account Management,"We're sorry for the inconvenience. You can update your email address from your account settings. If you need help, our support team can assist."
@@ -118,45 +118,161 @@ Update my mailing address.,Account Management,"We're sorry for the inconvenience
 I need to modify my profile.,Account Management,"We're sorry for the inconvenience. You can update your email address from your account settings. If you need help, our support team can assist."
 Please update my account info.,Account Management,"We're sorry for the inconvenience. You can update your email address from your account settings. If you need help, our support team can assist."
 Change the phone number on my account.,Account Management,"We're sorry for the inconvenience. You can update your email address from your account settings. If you need help, our support team can assist."
-What are your support hours?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-How do I contact support?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-Where can I find my invoice?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-How do I manage my plan?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-What payment methods do you accept?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-Where is my order history?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-How does the refund process work?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-How do I update my address?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-How do I change my password?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-Can you help me with my account?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-What is your return window?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-How can I get help?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-How do I manage my subscription?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-Where can I find help?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-What is your support email?,General Inquiry,"Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance."
-I keep getting an invalid password message even after resetting it,Account Access,"Use the password reset link again and check that you are using the email on your account. Contact support if access is still blocked."
-The verification code for sign in never arrives,Account Access,"Check your spam folder and confirm the phone number or email on your account. Contact support if you still cannot receive a verification code."
+What are your support hours?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+How do I contact support?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+Where can I find my invoice?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+How do I manage my plan?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+What payment methods do you accept?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+Where is my order history?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+How does the refund process work?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+How do I update my address?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+How do I change my password?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+Can you help me with my account?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+What is your return window?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+How can I get help?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+How do I manage my subscription?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+Where can I find help?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+What is your support email?,General Inquiry,Thanks for reaching out. Our support team is happy to help with your question. Please contact us if you need any additional assistance.
+I keep getting an invalid password message even after resetting it,Account Access,Use the password reset link again and check that you are using the email on your account. Contact support if access is still blocked.
+The verification code for sign in never arrives,Account Access,Check your spam folder and confirm the phone number or email on your account. Contact support if you still cannot receive a verification code.
 My account is locked after too many attempts,Account Access,"For your security, wait for the temporary lock to clear and use the password reset flow. Contact support if you remain locked out."
-I was charged for a month after I cancelled,Billing,"We can review your subscription billing. Your request has been sent to the billing support team."
-Please explain the extra fee on my invoice,Billing,"Please review the invoice details in your billing settings. Contact billing support to investigate an unexpected fee."
-My subscription renewal date looks wrong,Billing,"You can view your renewal date in subscription settings. Contact our billing team if the date does not match your records."
-My refund has not appeared on my card yet,Refund,"Refund processing times depend on your payment provider. Our support team can check the status of your refund."
-I returned my purchase and need the payment refunded,Refund,"Your return and refund request needs review. Please share the order number with our support team."
-Can I get a refund for an accidental purchase,Refund,"Our support team can review eligibility for a refund. Please provide the order details when contacting us."
+I was charged for a month after I cancelled,Billing,We can review your subscription billing. Your request has been sent to the billing support team.
+Please explain the extra fee on my invoice,Billing,Please review the invoice details in your billing settings. Contact billing support to investigate an unexpected fee.
+My subscription renewal date looks wrong,Billing,You can view your renewal date in subscription settings. Contact our billing team if the date does not match your records.
+My refund has not appeared on my card yet,Refund,Refund processing times depend on your payment provider. Our support team can check the status of your refund.
+I returned my purchase and need the payment refunded,Refund,Your return and refund request needs review. Please share the order number with our support team.
+Can I get a refund for an accidental purchase,Refund,Our support team can review eligibility for a refund. Please provide the order details when contacting us.
 The app closes whenever I open settings,Technical Issue,"Please update the app and restart your device. If the problem persists, send support your device and app version."
-I receive a timeout whenever I upload a file,Technical Issue,"Check your connection and try a smaller file. Contact technical support if the upload continues to time out."
+I receive a timeout whenever I upload a file,Technical Issue,Check your connection and try a smaller file. Contact technical support if the upload continues to time out.
 The page is blank after I submit the form,Technical Issue,"Refresh the page and retry after clearing cached site data. If it continues, contact technical support."
-My card payment was declined but my bank approved it,Payment Issue,"Please avoid repeated attempts while the payment is being checked. Contact support with the transaction time so we can investigate."
+My card payment was declined but my bank approved it,Payment Issue,Please avoid repeated attempts while the payment is being checked. Contact support with the transaction time so we can investigate.
 I see two pending authorizations for one purchase,Payment Issue,"Pending authorizations may clear automatically, but our payment team can review the transaction if both become posted charges."
 The checkout page will not accept my billing postcode,Payment Issue,"Check that your billing address matches the one registered with your card provider, then retry or contact payment support."
-The tracking link says my package was delivered but it is missing,Order / Delivery,"Please check nearby delivery locations and household members. Contact support with your order number so we can investigate."
-My order is delayed and the tracking has not updated,Order / Delivery,"Carrier tracking can take time to refresh. Our support team can check the shipment status using your order number."
-I received the wrong item in my delivery,Order / Delivery,"We are sorry the item was incorrect. Contact support with your order number and a description of the item received."
-I need to change the name on my profile,Account Management,"You can update profile details in account settings. Contact support if the name field cannot be changed."
-How can I delete my account and personal information,Account Management,"You can request account deletion through account privacy settings. Contact support if you need help completing the request."
-I want to change the email address linked to my account,Account Management,"Update your email from profile settings and complete the verification step. Contact support if you no longer have access to the old address."
-Someone accessed my account without permission,Security / Fraud,"Your security concern has been escalated to a human support specialist. Change your password and contact your financial institution if payment details may be at risk."
-I do not recognize a transaction on my account,Security / Fraud,"Your security concern has been escalated to a human support specialist. Contact your bank about any unrecognized payment."
-I think someone stole my identity using my account,Security / Fraud,"Your security concern has been escalated urgently to a human support specialist. Please contact your financial institution and secure your account."
-Do you offer support on weekends,General Inquiry,"Our support team can help with general questions. Contact us through the support page for current service hours."
-Where can I read your privacy policy,General Inquiry,"You can find our privacy policy from the website footer. Contact support if you have a question about a specific section."
-Can I use the service from another country,General Inquiry,"Availability can vary by location. Contact support with your country so we can confirm current service availability."
+The tracking link says my package was delivered but it is missing,Order / Delivery,Please check nearby delivery locations and household members. Contact support with your order number so we can investigate.
+My order is delayed and the tracking has not updated,Order / Delivery,Carrier tracking can take time to refresh. Our support team can check the shipment status using your order number.
+I received the wrong item in my delivery,Order / Delivery,We are sorry the item was incorrect. Contact support with your order number and a description of the item received.
+I need to change the name on my profile,Account Management,You can update profile details in account settings. Contact support if the name field cannot be changed.
+How can I delete my account and personal information,Account Management,You can request account deletion through account privacy settings. Contact support if you need help completing the request.
+I want to change the email address linked to my account,Account Management,Update your email from profile settings and complete the verification step. Contact support if you no longer have access to the old address.
+Someone accessed my account without permission,Security / Fraud,Your security concern has been escalated to a human support specialist. Change your password and contact your financial institution if payment details may be at risk.
+I do not recognize a transaction on my account,Security / Fraud,Your security concern has been escalated to a human support specialist. Contact your bank about any unrecognized payment.
+I think someone stole my identity using my account,Security / Fraud,Your security concern has been escalated urgently to a human support specialist. Please contact your financial institution and secure your account.
+Do you offer support on weekends,General Inquiry,Our support team can help with general questions. Contact us through the support page for current service hours.
+Where can I read your privacy policy,General Inquiry,You can find our privacy policy from the website footer. Contact support if you have a question about a specific section.
+Can I use the service from another country,General Inquiry,Availability can vary by location. Contact support with your country so we can confirm current service availability.
+My password is incorrect even though I just reset it,Account Access,Try signing in with the newest password reset link and check that your browser did not autofill an older password.
+I changed my password but still cannot log in,Account Access,Use the most recent password reset email and check that Caps Lock is off. Contact support if sign-in still fails.
+I forgot the email address I used to register,Account Access,Contact support from your registered email address or provide the account details requested in the secure recovery form.
+The verification code for login never arrives,Account Access,Check your spam folder and confirm the email address or phone number on your account. Request a new code if needed.
+My account says too many sign-in attempts,Account Access,"Wait for the temporary sign-in limit to clear, then reset your password if you still cannot access the account."
+The password reset link says it has expired,Account Access,Request a new password reset email and use the newest link before it expires.
+I need to unlock my account after too many attempts,Account Access,Wait for the temporary lock to clear and use the password reset option if you cannot sign in.
+Can I sign in with a one-time code instead,Account Access,Choose the one-time-code sign-in option if it is available for your account and verify the code sent to your registered contact.
+My card was charged two separate times,Payment Issue,"We can investigate a duplicate charge. Contact payment support with the transaction dates and amounts, but do not send full card details."
+My payment keeps getting rejected,Payment Issue,Confirm your payment method is active and your billing details match. Contact your bank or payment support if it is still declined.
+The checkout says my card is invalid,Payment Issue,"Check the expiry date and billing address, then try again. Never share your full card number in chat."
+I paid but the order page still says unpaid,Payment Issue,"Allow a short time for payment processing, then contact support with your order number if the status does not update."
+The payment page timed out after I submitted my card,Payment Issue,Check your account for a pending charge before retrying. Contact payment support if the payment status is unclear.
+My bank approved the payment but your app declined it,Payment Issue,Confirm the billing details and try once more. Contact payment support with the time and amount if the decline continues.
+There are two pending charges for the same purchase,Payment Issue,Pending authorizations may update after processing. Contact payment support if both charges post to your statement.
+Why was my payment method declined,Payment Issue,Your bank or payment provider may have declined the transaction. Verify the payment details or contact the provider for the reason.
+Please return my purchase and refund the money,Refund,Submit a refund request from your order details. Our team will review it and share the next steps.
+I have not received the refund I was promised,Refund,Refund processing times vary by payment provider. Contact support with your order number so we can check its status.
+Can I get a refund for an accidental order,Refund,Contact support with the order number and explain that the order was accidental so the team can review your request.
+The refund amount is different from what I expected,Refund,Contact support with the order number and refund amount so the team can review the calculation.
+I want to cancel this order and get my money back,Refund,"If the order can still be cancelled, submit a cancellation and refund request from its details page."
+My refund request was denied and I need help,Refund,Reply to the refund decision or contact support with your order number to request a review.
+How long does a card refund usually take,Refund,"After approval, your payment provider may take several business days to post a refund."
+The refund went to an old payment card,Refund,Contact support with your order details. Your payment provider can explain how refunds to replaced cards are handled.
+The application closes whenever I open settings,Technical Issue,"Update the application and restart your device. If it continues, contact technical support with your device and app version."
+I get a blank screen after signing in,Technical Issue,Refresh the page and clear the site cache. Contact technical support if the blank screen persists.
+The search button does nothing when I click it,Technical Issue,"Reload the page and try again. If the problem continues, contact technical support with the steps to reproduce it."
+Notifications stopped appearing on my phone,Technical Issue,"Check notification permissions and battery settings for the app, then restart it."
+The page takes forever to load on my connection,Technical Issue,Check your connection and try a fresh browser session. Contact technical support if other sites load normally.
+I see an error code every time I upload a file,Technical Issue,Try a smaller supported file and record the error code. Technical support can investigate if it continues.
+The newest version introduced a display glitch,Technical Issue,Restart the application and check for an updated release. Contact technical support with your device and version.
+Audio playback is cutting out in the app,Technical Issue,"Check your connection and audio permissions, then restart playback. Contact technical support if it continues."
+Can someone tell me where my shipment is,Order / Delivery,Open your order details to view tracking. Contact support with your order number if the tracking has not updated.
+My delivery was sent to the wrong address,Order / Delivery,Contact support with your order number as soon as possible so the team can check available delivery options.
+The courier has not picked up my package yet,Order / Delivery,Carrier scans may take time to appear. Contact support with your order number if there is no update after the expected window.
+I need to change the delivery instructions,Order / Delivery,Check the tracking page for delivery options or contact support with your order number before delivery.
+Part of my order is missing from the box,Order / Delivery,Contact support with your order number and the missing item so the team can investigate.
+Where do I find the tracking number for my purchase,Order / Delivery,Your tracking number is available in the order details or shipping confirmation email.
+The package arrived damaged during delivery,Order / Delivery,Contact support with your order number and a description of the damage so the team can help.
+Can you deliver my order to a pickup point,Order / Delivery,Available delivery options appear during checkout. Contact support if you need help with an existing shipment.
+How do I remove an old phone number from my profile,Account Management,Open profile settings to update your phone number. Contact support if you cannot verify the change.
+I want to close my account permanently,Account Management,You can submit an account deletion request in privacy settings. Contact support if you need help with the request.
+Can I update the contact details on my account,Account Management,Update your contact details from profile settings and complete any verification steps shown.
+I need to change my account username,Account Management,"If username changes are supported, you can make them in profile settings. Contact support if the option is unavailable."
+How do I download a copy of my account data,Account Management,Check privacy settings for the data export option or contact support for help with a data request.
+I no longer want marketing emails,Account Management,Use the unsubscribe link in a marketing email or change email preferences in your account settings.
+Please change the name shown on my invoices,Account Management,Update your billing profile details in account settings. Contact support if you need an issued invoice corrected.
+I need to switch to a different account email,Account Management,Update the email in profile settings and confirm the verification message sent to the new address.
+Can you explain how your support service works,General Inquiry,"Our support team can answer service questions and help with account, payment, and order issues."
+Where can I find the terms for this service,General Inquiry,The service terms are available from the website footer. Contact support if you have a question about a section.
+Is customer support available in my language,General Inquiry,Contact support and tell us your preferred language so we can confirm the available assistance.
+How can I speak to a real support person,General Inquiry,You can request a support specialist here and the team will follow up through your account.
+What information should I include in a support request,General Inquiry,Describe what happened and include a relevant order or case number. Never send passwords or full payment details.
+Can I change my notification preferences,General Inquiry,Notification preferences are available in account settings. Contact support if a setting is missing.
+Do you have a help center for using the service,General Inquiry,Open the Help section in your account for guides and answers to common questions.
+I have a question that is not listed here,General Inquiry,Tell us a little more about what you need and our support team will point you in the right direction.
+"Hi there, can you help me",Greeting,Hi! I’m your support assistant. What can I help you with today?
+Hello support,Greeting,Hello! Tell me what you need help with and I’ll do my best to guide you.
+Hey,Greeting,Hi! What can I help you with today?
+Good morning,Greeting,Good morning! How can I help you today?
+Good afternoon,Greeting,Hello! What can I help you with?
+Good evening,Greeting,Good evening! Tell me how I can help.
+Is anyone there,Greeting,Hi! I’m here to help. What can I do for you?
+Hey support team,Greeting,Hello! Share your question whenever you’re ready.
+"Hi, I have a question",Greeting,Hi! Go ahead and tell me what you need.
+"Hello, I need a little help",Greeting,Hello! I’ll do my best to help.
+Hey there,Greeting,Hi there! What can I help you with?
+Good day,Greeting,Hello! How may I help you today?
+Howdy,Greeting,Hi! What can I help you with?
+Yo,Greeting,Hi! What do you need help with?
+Greetings,Greeting,Hello! Tell me what you’d like help with.
+Hi again,Greeting,Welcome back! What can I help with?
+Can you hear me,Greeting,I’m here. Tell me what you need help with.
+Anyone available to help,Greeting,Hello! I’m available to help with your support question.
+Morning,Greeting,Good morning! How can I help?
+"Hey, are you online",Greeting,Hi! I’m here and ready to help.
+Thanks for sorting that out,Thanks / Goodbye,"You’re welcome! If anything else comes up, I’m here to help."
+Thank you so much,Thanks / Goodbye,You’re very welcome. Have a great day!
+"Thanks, that helped",Thanks / Goodbye,I’m glad I could help. Let me know if you need anything else.
+Appreciate your help,Thanks / Goodbye,You’re welcome! I’m happy to help.
+Thx,Thanks / Goodbye,You’re welcome!
+Ty,Thanks / Goodbye,Anytime! Let me know if you need more help.
+Cheers,Thanks / Goodbye,You’re welcome. Take care!
+"That is all, thanks",Thanks / Goodbye,Glad I could help. Thanks for reaching out!
+Goodbye,Thanks / Goodbye,Goodbye! We’re here if you need help again.
+Bye for now,Thanks / Goodbye,Take care! Reach out whenever you need support.
+See you later,Thanks / Goodbye,See you next time. Have a good day!
+Many thanks for the quick reply,Thanks / Goodbye,You’re welcome! I’m glad the reply was helpful.
+I appreciate you looking into it,Thanks / Goodbye,You’re welcome. Let us know if you need anything else.
+"Perfect, thank you",Thanks / Goodbye,You’re welcome! I’m glad that worked.
+"No more questions, thanks",Thanks / Goodbye,Thanks for contacting support. Have a great day!
+Thanks again for your time,Thanks / Goodbye,You’re welcome. We’re here whenever you need us.
+"That answers my question, thank you",Thanks / Goodbye,I’m glad that answered your question!
+Much appreciated,Thanks / Goodbye,Happy to help. Take care!
+"Thank you, bye",Thanks / Goodbye,You’re welcome. Goodbye!
+Ok thanks,Thanks / Goodbye,You’re welcome!
+How do I delete my Instagram profile,Out of Scope,"I can help with this service, but I can’t manage Instagram accounts. Please use that service’s own settings or help center."
+Can you reset my Facebook password,Out of Scope,"I can help with this service, but I can’t access or manage Facebook accounts. Please use Facebook’s own account recovery."
+What is the weather going to be tomorrow,Out of Scope,"I’m here to help with this service’s account, billing, and support questions, not weather forecasts."
+Who won the football game last night,Out of Scope,"I can help with this service, but I don’t have live sports results."
+Write a poem about the ocean,Out of Scope,"I’m focused on customer support for this service, so I can’t help write a poem."
+Can you tell me the capital of Japan,Out of Scope,"I can help with questions about this service, but not general knowledge questions."
+How do I cancel Netflix,Out of Scope,I can’t manage Netflix subscriptions. Please use Netflix’s own account settings or help center.
+Please fix my TikTok account,Out of Scope,"I can help with this service, but I can’t access or troubleshoot TikTok accounts."
+What is the latest stock price for Apple,Out of Scope,I can’t provide live stock prices. I can help with questions about this service.
+Tell me a joke,Out of Scope,I’m here to help with customer support for this service rather than general entertainment.
+Can you recover my Google account,Out of Scope,I can’t access Google accounts. Please use Google’s official account recovery options.
+How do I change my Spotify plan,Out of Scope,I can’t manage Spotify accounts or plans. Please use Spotify’s own account settings.
+What is the recipe for pancakes,Out of Scope,I’m focused on support for this service and can’t provide recipes.
+Can you get my WhatsApp messages back,Out of Scope,I can’t access or recover WhatsApp data. Please use WhatsApp’s own help resources.
+What time does the sun set today,Out of Scope,"I don’t have live local information, but I can help with questions about this support service."
+Please find a Snapchat username for me,Out of Scope,I can’t search or manage Snapchat accounts. I can help with this service’s support questions.
+Can you tell me a random fun fact,Out of Scope,"I’m here to help with this service, so I can’t provide general trivia."
+Help me cancel Amazon Prime,Out of Scope,I can’t manage Amazon Prime subscriptions. Please use Amazon’s account settings or help center.
+Can you explain how gravity works,Out of Scope,"I can help with customer support for this service, but not general science questions."
+What is the current weather in London,Out of Scope,I can’t provide live weather forecasts. I can help with questions about this service.

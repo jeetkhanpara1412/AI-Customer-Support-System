@@ -99,6 +99,20 @@ def test_fraud_chat_creates_high_priority_ticket(client: TestClient):
     assert tickets.json()[0]["priority"] == "high"
 
 
+def test_chat_remembers_context_and_switches_explicit_follow_up_topic(client: TestClient):
+    _, token = register_and_login(client)
+    headers = {"Authorization": f"Bearer {token}"}
+    first = client.post("/api/chat", headers=headers, json={"message": "I was charged twice"}).json()
+    assert first["category"] == "Payment Issue"
+    second = client.post(
+        "/api/chat",
+        headers=headers,
+        json={"message": "what about refunds?", "conversation_id": first["conversation_id"]},
+    ).json()
+    assert second["category"] == "Refund"
+    assert second["conversation_id"] == first["conversation_id"]
+
+
 def test_user_cannot_read_other_conversations_or_admin_routes(client: TestClient):
     _, first_token = register_and_login(client)
     _, other_token = register_and_login(client)

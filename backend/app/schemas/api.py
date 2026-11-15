@@ -65,9 +65,10 @@ class ChatResponse(BaseModel):
     category: str
     confidence: float
     similarity: float
-    mode: Literal["matched", "default", "fallback"]
+    mode: Literal["matched", "default", "fallback", "clarify", "greeting", "thanks", "out_of_scope"]
     escalated: bool
     ticket_id: int | None = None
+    options: list[str] = Field(default_factory=list)
 
 
 class MessageRead(BaseModel):

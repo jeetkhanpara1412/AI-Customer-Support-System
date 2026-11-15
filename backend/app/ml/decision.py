@@ -1,13 +1,29 @@
 class DecisionEngine:
-    def __init__(self, confidence_threshold: float = 0.70, similarity_threshold: float = 0.35):
-        self.confidence_threshold = confidence_threshold
-        self.similarity_threshold = similarity_threshold
+    def __init__(
+        self,
+        answer_confidence: float = 0.60,
+        answer_similarity: float = 0.45,
+        clarify_confidence: float = 0.35,
+    ):
+        self.answer_confidence = answer_confidence
+        self.answer_similarity = answer_similarity
+        self.clarify_confidence = clarify_confidence
 
     def decide(self, classifier_confidence: float, similarity_score: float, category: str = "") -> str:
-        if category.casefold() == "security / fraud":
+        normalized_category = category.casefold()
+        if normalized_category == "security / fraud":
             return "fallback"
-        if similarity_score >= self.similarity_threshold:
+        if normalized_category == "greeting":
+            return "greeting"
+        if normalized_category == "thanks / goodbye":
+            return "thanks"
+        if normalized_category == "out of scope":
+            return "out_of_scope"
+        if (
+            classifier_confidence >= self.answer_confidence
+            and similarity_score >= self.answer_similarity
+        ):
             return "matched"
-        if classifier_confidence >= self.confidence_threshold:
-            return "default"
+        if classifier_confidence >= self.clarify_confidence:
+            return "clarify"
         return "fallback"

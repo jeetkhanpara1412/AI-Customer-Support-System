@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -34,6 +34,8 @@ class Conversation(Base):
     title: Mapped[str] = mapped_column(String(160), default="New conversation")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+    current_topic: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    pending_clarification: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
     user: Mapped[User] = relationship(back_populates="conversations")
     messages: Mapped[list["Message"]] = relationship(back_populates="conversation", cascade="all, delete-orphan")
     ticket: Mapped["Ticket | None"] = relationship(back_populates="conversation", uselist=False)

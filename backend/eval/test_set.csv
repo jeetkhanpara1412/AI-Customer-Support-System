@@ -1,0 +1,157 @@
+Message,Category
+"Hi, I’m new here",Greeting
+Good morning support team,Greeting
+"Hey, are you available",Greeting
+Hello there,Greeting
+"Hi again, I have a question",Greeting
+"Yo, can I ask something",Greeting
+"Hey, nice to meet you",Greeting
+"Howdy, is anyone there",Greeting
+"Greetings, can you help",Greeting
+"Morning, support",Greeting
+"Hey there, I need assistance",Greeting
+Is anyone there to help me,Greeting
+"Hello, I’m checking in",Greeting
+Thanks a ton for the help,Thanks / Goodbye
+"Thank you, that fixed it",Thanks / Goodbye
+Thx for getting back to me,Thanks / Goodbye
+I appreciate your quick response,Thanks / Goodbye
+"Perfect, many thanks",Thanks / Goodbye
+"Cheers, that is all",Thanks / Goodbye
+"Bye, and thanks",Thanks / Goodbye
+"You have been helpful, thank you",Thanks / Goodbye
+"Ok, thanks again",Thanks / Goodbye
+Really grateful for your help,Thanks / Goodbye
+That answers everything,Thanks / Goodbye
+Goodbye and have a nice day,Thanks / Goodbye
+Thanks for your time,Thanks / Goodbye
+Delete my Instagram account for me,Out of Scope
+Can you help me get into TikTok,Out of Scope
+What will the weather be like this weekend,Out of Scope
+How do I cancel my Netflix membership,Out of Scope
+Tell me who won the match,Out of Scope
+What is the capital city of Brazil,Out of Scope
+Can you write a funny poem,Out of Scope
+Help me change Facebook settings,Out of Scope
+I need the current price of bitcoin,Out of Scope
+Give me a pancake recipe,Out of Scope
+Can you log in to my Google account,Out of Scope
+How can I recover my Snapchat profile,Out of Scope
+What is the weather in Toronto today,Out of Scope
+My passwrod reset did not work,Account Access
+I can’t get into my account after resetting credentials,Account Access
+The login verification code is missing,Account Access
+I forgot which email I used to sign up,Account Access
+It says my sign-in is locked,Account Access
+I need a new password recovery link,Account Access
+Can I change my passcode,Account Access
+My account keeps rejecting my credentials,Account Access
+The one-time login code expired,Account Access
+I’m locked out and need account recovery,Account Access
+Login keeps sending me back to the sign-in page,Account Access
+How do I reset my password safely,Account Access
+My account was locked after failed logins,Account Access
+Why did I get charged two times today,Payment Issue
+My debit card was rejected at checkout,Payment Issue
+There are duplicate charges on my statement,Payment Issue
+The card payment failed but money is pending,Payment Issue
+My checkout payment keeps declining,Payment Issue
+I see two charges for one purchase,Payment Issue
+The bank accepted it but your payment screen says failed,Payment Issue
+I paid but the order is marked unpaid,Payment Issue
+The card authorization timed out,Payment Issue
+Why was my payment method declined again,Payment Issue
+I was billed twice for one order,Payment Issue
+My payment was rejected even though funds are available,Payment Issue
+Checkout charged me two times and I need help,Payment Issue
+I want my money returned for this purchase,Refund
+Where is the refund for my cancelled order,Refund
+The amount refunded to me is too small,Refund
+Can you reverse the purchase and return my money,Refund
+My refund has taken longer than expected,Refund
+I need to request a refund for an accidental purchase,Refund
+The refund request says denied,Refund
+Please send the money back to my card,Refund
+I returned the item but there is no refund,Refund
+I was charged for an order I returned,Refund
+How many days until my refund arrives,Refund
+My refund was approved but has not posted,Refund
+Can support review my refund decision,Refund
+I was billed for a plan I cancelled,Billing
+Why did my monthly subscription renew,Billing
+Where can I see my latest invoice,Billing
+Please explain the extra fee on my bill,Billing
+How do I switch to a cheaper plan,Billing
+My annual membership price changed,Billing
+I need to stop the recurring subscription,Billing
+Can I update the payment details for my plan,Billing
+I have a question about this month’s invoice,Billing
+What date does my plan renew,Billing
+I was charged the wrong subscription price,Billing
+How can I download a receipt for my plan,Billing
+The billing page shows an unexpected renewal,Billing
+The app closes whenever I open the profile page,Technical Issue
+I see a blank screen after signing in,Technical Issue
+Notifications stopped working after the update,Technical Issue
+The search page freezes on my phone,Technical Issue
+Every upload returns an error message,Technical Issue
+The website is really slow to load,Technical Issue
+Audio keeps cutting out during playback,Technical Issue
+The newest release broke the layout,Technical Issue
+The app crashes when I tap settings,Technical Issue
+I can’t open the help page,Technical Issue
+The page won’t load on my browser,Technical Issue
+There is a glitch when I change the display setting,Technical Issue
+My application keeps freezing after startup,Technical Issue
+Can someone check where my parcel is,Order / Delivery
+The courier has not updated the tracking,Order / Delivery
+My package was delivered to the wrong address,Order / Delivery
+One item is missing from my shipment,Order / Delivery
+The delivery is later than the estimated date,Order / Delivery
+Where do I find my shipment tracking code,Order / Delivery
+The box arrived damaged,Order / Delivery
+Can I send this order to a pickup location,Order / Delivery
+The carrier has not collected my package,Order / Delivery
+My order status has not changed in days,Order / Delivery
+I received the wrong product in the parcel,Order / Delivery
+How do I change delivery instructions,Order / Delivery
+My shipment is missing after delivery,Order / Delivery
+Please remove my old phone number from the profile,Account Management
+Please permanently deactivate my user profile,Account Management
+How can I update my profile email address,Account Management
+Can I download all the personal data you have,Account Management
+I want to unsubscribe from promotional emails,Account Management
+Where do I edit my account username,Account Management
+I need to delete my account and information,Account Management
+Can I update my contact details,Account Management
+The name on my account is incorrect,Account Management
+Please deactivate my profile,Account Management
+I want to change the email linked to my account,Account Management
+How can I manage my privacy preferences,Account Management
+I need to correct my profile details,Account Management
+Someone got into my account and changed things,Security / Fraud
+This transaction is not mine,Security / Fraud
+I think my login was stolen,Security / Fraud
+There is suspicious activity on my profile,Security / Fraud
+My account was hacked overnight,Security / Fraud
+A stranger accessed my account without permission,Security / Fraud
+I don’t recognize this payment,Security / Fraud
+Someone took over my account,Security / Fraud
+I found an unauthorized charge on my card,Security / Fraud
+My identity may have been used by someone else,Security / Fraud
+The account sent messages I did not write,Security / Fraud
+I think a scammer got my credentials,Security / Fraud
+My password was changed by an unknown person,Security / Fraud
+How do I contact a real support person,General Inquiry
+Where can I read the privacy policy,General Inquiry
+Do you provide support on weekends,General Inquiry
+Can you explain how this service works,General Inquiry
+Where is the help center,General Inquiry
+What should I include in a support request,General Inquiry
+How do I reach the customer care team,General Inquiry
+Is help available in another language,General Inquiry
+Where are your service terms listed,General Inquiry
+How can I change notification preferences,General Inquiry
+Can I ask a question that is not listed,General Inquiry
+Does this service work in my country,General Inquiry
+What kind of issues can your support team help with,General Inquiry

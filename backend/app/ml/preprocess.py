@@ -11,10 +11,23 @@ _REPLACEMENTS = (
     (r"\bunauthorized transaction\b", "fraud transaction"),
     (r"\bunauthorized access\b|\bcompromised account\b|\bhacked account\b", "fraud account"),
 )
+_COMMON_TYPOS = (
+    (r"\bchnage\b", "change"),
+    (r"\bpasword\b|\bpasswrod\b|\bpaassword\b", "password"),
+    (r"\bacount\b", "account"),
+    (r"\bsubscrption\b", "subscription"),
+)
+
+
+def correct_common_typos(text: str) -> str:
+    corrected = text or ""
+    for pattern, replacement in _COMMON_TYPOS:
+        corrected = re.sub(pattern, replacement, corrected, flags=re.IGNORECASE)
+    return corrected
 
 
 def preprocess_text(text: str) -> str:
-    normalized = (text or "").lower()
+    normalized = correct_common_typos(text).lower()
     normalized = normalized.replace("can't", "cannot").replace("won't", "will not")
     normalized = re.sub(r"https?://\S+|www\.\S+", " ", normalized)
     normalized = re.sub(r"[^a-z0-9\s]", " ", normalized)

@@ -51,7 +51,7 @@ async def lifespan(_: FastAPI):
                     )
                 )
                 db.commit()
-    initialize_ml()
+        initialize_ml(db)
     yield
 
 

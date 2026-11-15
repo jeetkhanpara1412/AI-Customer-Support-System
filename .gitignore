@@ -30,6 +30,7 @@ coverage/
 backend/app/ml/artifacts/*.pkl
 backend/app/ml/artifacts/*.joblib
 backend/app/ml/artifacts/*.json
+backend/app/ml/artifacts/transformers/
 backend/.coverage
 backend/.pytest_cache/
 frontend/dist/
