@@ -36,6 +36,7 @@ jobs:
       - run: cd backend && ruff check .
       - run: cd backend && alembic upgrade head
       - run: cd backend && pytest -q
+      - run: cd backend && python scripts/evaluate.py
 
   frontend:
     runs-on: ubuntu-latest

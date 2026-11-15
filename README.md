@@ -6,7 +6,8 @@ A full-stack support application with a FastAPI API, React client, ML-assisted m
 
 - Email/password registration and login, short-lived JWT access tokens, and rotating HttpOnly refresh cookies.
 - Persistent conversations and ticket history backed by PostgreSQL.
-- TF-IDF retrieval and logistic-regression classification, with confidence/similarity thresholds and escalation for potential fraud.
+- Sentence-transformer embedding retrieval and calibrated logistic-regression classification with character n-grams for typo tolerance.
+- Direct greetings and thanks, polite out-of-scope refusals, confidence-based clarification, and human escalation for security or fraud.
 - REST chat with an authenticated WebSocket option and automatic ticket escalation.
 - Admin ticket management, live replies, knowledge-base editing, retraining, and summary statistics.
 - Redis-backed response caching and rate limiting.
@@ -18,7 +19,7 @@ A full-stack support application with a FastAPI API, React client, ML-assisted m
 flowchart LR
     Browser --> Frontend[React + Vite]
     Frontend -->|REST / WebSocket| API[FastAPI]
-    API --> ML[TF-IDF + LogisticRegression]
+    API --> ML[Embeddings + character n-grams + calibrated LogisticRegression]
     API --> PG[(PostgreSQL)]
     API --> Redis[(Redis)]
     Admin --> Frontend
@@ -57,7 +58,7 @@ For local development without Compose, run PostgreSQL and Redis separately. Conf
 cd backend
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements.txt -r requirements-dev.txt
 alembic upgrade head
 python scripts/seed.py
 uvicorn app.main:app --reload
@@ -113,7 +114,10 @@ cd backend
 ruff check .
 pytest -q
 python -m app.ml.train
+python scripts/evaluate.py
 ```
+
+The evaluation command checks the held-out labeled message set, reports category metrics, a confusion matrix, escalation, clarification, and wrong-answer rates, and fails if accuracy is below 88% or Security / Fraud recall is below 100%. CI runs this evaluation after the backend tests.
 
 ```bash
 cd frontend
@@ -139,8 +143,9 @@ To run the end-to-end API/WebSocket smoke test against an already-running stack,
 | `REFRESH_TOKEN_DAYS` | Backend | Refresh-token lifetime |
 | `CORS_ORIGINS` | Backend | Comma-separated exact trusted origins |
 | `ENV` | Backend / Compose | Runtime environment (`development`, `test`, or `production`) |
-| `SIMILARITY_THRESHOLD` | Backend | Minimum retrieval similarity for a matched response |
-| `CONFIDENCE_THRESHOLD` | Backend | Minimum classifier confidence for a default response |
+| `ANSWER_CONFIDENCE_THRESHOLD` | Backend | Minimum classifier confidence for a direct answer (default `0.60`) |
+| `ANSWER_SIMILARITY_THRESHOLD` | Backend | Minimum retrieval similarity for a direct answer (default `0.45`) |
+| `CLARIFY_CONFIDENCE_THRESHOLD` | Backend | Minimum classifier confidence before clarification rather than escalation (default `0.35`) |
 | `FIRST_ADMIN_EMAIL`, `FIRST_ADMIN_PASSWORD` | Backend / Compose | Bootstrap the first administrator |
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | Compose | Initialize the PostgreSQL container |
 | `VITE_API_URL` | Frontend build | HTTP API base URL |
