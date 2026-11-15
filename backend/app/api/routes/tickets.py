@@ -11,7 +11,9 @@ router = APIRouter(prefix="/tickets", tags=["tickets"])
 
 
 @router.get("", response_model=list[TicketRead])
-def list_my_tickets(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def list_my_tickets(
+    user: User = Depends(get_current_user), db: Session = Depends(get_db)
+):
     return db.scalars(
         select(Ticket)
         .where(Ticket.user_id == user.id)
@@ -21,7 +23,11 @@ def list_my_tickets(user: User = Depends(get_current_user), db: Session = Depend
 
 
 @router.get("/{ticket_id}", response_model=TicketRead)
-def get_my_ticket(ticket_id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def get_my_ticket(
+    ticket_id: int,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     ticket = db.scalar(
         select(Ticket)
         .where(Ticket.id == ticket_id, Ticket.user_id == user.id)

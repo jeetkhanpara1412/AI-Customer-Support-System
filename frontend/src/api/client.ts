@@ -17,7 +17,11 @@ const ticketSchema = z.object({
   category: z.string(),
   priority: z.enum(['low', 'medium', 'high']),
   status: z.enum(['open', 'in_progress', 'resolved']),
-  replies: z.array(z.object({ id: z.number(), text: z.string(), created_at: z.string() })).default([]),
+  replies: z
+    .array(
+      z.object({ id: z.number(), text: z.string(), created_at: z.string() }),
+    )
+    .default([]),
   created_at: z.string(),
 })
 const chatSchema = z.object({
@@ -31,17 +35,23 @@ const chatSchema = z.object({
   escalated: z.boolean(),
   ticket_id: z.number().nullable().optional(),
 })
-const conversationSummarySchema = z.object({ id: z.number(), title: z.string(), updated_at: z.string() })
+const conversationSummarySchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  updated_at: z.string(),
+})
 const conversationDetailSchema = conversationSummarySchema.extend({
-  messages: z.array(z.object({
-    id: z.number(),
-    role: z.enum(['user', 'assistant', 'agent']),
-    text: z.string(),
-    category: z.string().nullable().optional(),
-    confidence: z.number().nullable().optional(),
-    escalated: z.boolean().optional(),
-    created_at: z.string(),
-  })),
+  messages: z.array(
+    z.object({
+      id: z.number(),
+      role: z.enum(['user', 'assistant', 'agent']),
+      text: z.string(),
+      category: z.string().nullable().optional(),
+      confidence: z.number().nullable().optional(),
+      escalated: z.boolean().optional(),
+      created_at: z.string(),
+    }),
+  ),
 })
 const knowledgeSchema = z.object({
   id: z.number(),
@@ -59,27 +69,43 @@ export const api = axios.create({
 
 api.interceptors.response.use((response) => {
   const url = (response.config.url || '').split('?')[0]
-  if (url.endsWith('/auth/register') || url.endsWith('/auth/me')) userSchema.parse(response.data)
+  if (url.endsWith('/auth/register') || url.endsWith('/auth/me'))
+    userSchema.parse(response.data)
   else if (url.endsWith('/auth/login')) {
-    z.object({ access_token: z.string(), token_type: z.literal('bearer'), user: userSchema }).parse(response.data)
-  } else if (url.endsWith('/auth/refresh')) z.object({ access_token: z.string() }).parse(response.data)
+    z.object({
+      access_token: z.string(),
+      token_type: z.literal('bearer'),
+      user: userSchema,
+    }).parse(response.data)
+  } else if (url.endsWith('/auth/refresh'))
+    z.object({ access_token: z.string() }).parse(response.data)
   else if (url.endsWith('/chat')) chatSchema.parse(response.data)
-  else if (url.endsWith('/conversations')) z.array(conversationSummarySchema).parse(response.data)
-  else if (/\/conversations\/\d+$/.test(url)) conversationDetailSchema.parse(response.data)
-  else if (/\/tickets\/\d+$/.test(url) || /\/admin\/tickets\/\d+$/.test(url)) ticketSchema.parse(response.data)
-  else if (url.endsWith('/tickets') || url.endsWith('/admin/tickets')) z.array(ticketSchema).parse(response.data)
+  else if (url.endsWith('/conversations'))
+    z.array(conversationSummarySchema).parse(response.data)
+  else if (/\/conversations\/\d+$/.test(url))
+    conversationDetailSchema.parse(response.data)
+  else if (/\/tickets\/\d+$/.test(url) || /\/admin\/tickets\/\d+$/.test(url))
+    ticketSchema.parse(response.data)
+  else if (url.endsWith('/tickets') || url.endsWith('/admin/tickets'))
+    z.array(ticketSchema).parse(response.data)
   else if (url.endsWith('/admin/stats')) {
     z.object({
       open_tickets: z.number(),
       resolved_today: z.number(),
       escalation_rate: z.number(),
       avg_confidence: z.number(),
-      by_category: z.array(z.object({ category: z.string(), count: z.number() })),
+      by_category: z.array(
+        z.object({ category: z.string(), count: z.number() }),
+      ),
     }).parse(response.data)
-  } else if (url.endsWith('/admin/knowledge')) z.array(knowledgeSchema).parse(response.data)
-  else if (/\/admin\/knowledge\/\d+$/.test(url)) knowledgeSchema.parse(response.data)
-  else if (url.endsWith('/admin/users')) z.array(userSchema).parse(response.data)
-  else if (url.endsWith('/admin/retrain')) z.object({ accuracy: z.number(), samples: z.number() }).parse(response.data)
+  } else if (url.endsWith('/admin/knowledge'))
+    z.array(knowledgeSchema).parse(response.data)
+  else if (/\/admin\/knowledge\/\d+$/.test(url))
+    knowledgeSchema.parse(response.data)
+  else if (url.endsWith('/admin/users'))
+    z.array(userSchema).parse(response.data)
+  else if (url.endsWith('/admin/retrain'))
+    z.object({ accuracy: z.number(), samples: z.number() }).parse(response.data)
   return response
 })
 
@@ -113,7 +139,10 @@ api.interceptors.response.use(
         {},
         { withCredentials: true, headers: { 'X-Requested-With': 'fetch' } },
       )
-      .then(({ data }) => z.object({ access_token: z.string() }).parse(data).access_token)
+      .then(
+        ({ data }) =>
+          z.object({ access_token: z.string() }).parse(data).access_token,
+      )
       .finally(() => {
         refreshRequest = null
       })

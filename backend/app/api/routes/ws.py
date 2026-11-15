@@ -44,10 +44,14 @@ async def live_chat(websocket: WebSocket):
                         conversation_id=payload.get("conversation_id"),
                     )
                 except (ValueError, TypeError):
-                    await websocket.send_json({"type": "error", "message": "Invalid chat message"})
+                    await websocket.send_json(
+                        {"type": "error", "message": "Invalid chat message"}
+                    )
                     continue
                 await websocket.send_json({"type": "typing"})
-                result = process_chat(db, user, chat_request.message, chat_request.conversation_id)
+                result = process_chat(
+                    db, user, chat_request.message, chat_request.conversation_id
+                )
                 await websocket.send_json({"type": "assistant_message", **result})
         except WebSocketDisconnect:
             pass

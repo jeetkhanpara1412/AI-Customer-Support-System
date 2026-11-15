@@ -5,7 +5,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+    )
 
     database_url: str = "postgresql+psycopg://postgres:postgres@localhost:5432/app"
     redis_url: str = "redis://localhost:6379/0"
@@ -25,13 +27,19 @@ class Settings(BaseSettings):
     def require_explicit_origins(cls, origins: str | list[str]) -> str | list[str]:
         values = origins.split(",") if isinstance(origins, str) else origins
         if not values or any(origin.strip() == "*" for origin in values):
-            raise ValueError("CORS_ORIGINS must contain explicit origins and cannot include '*'")
+            raise ValueError(
+                "CORS_ORIGINS must contain explicit origins and cannot include '*'"
+            )
         return origins
 
     @property
     def cors_origin_list(self) -> list[str]:
         if isinstance(self.cors_origins, str):
-            return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+            return [
+                origin.strip()
+                for origin in self.cors_origins.split(",")
+                if origin.strip()
+            ]
         return self.cors_origins
 
     @model_validator(mode="after")

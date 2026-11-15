@@ -34,7 +34,9 @@ def create_access_token(subject: str) -> str:
 
 
 def create_refresh_token(subject: str) -> str:
-    return create_token(subject, "refresh", timedelta(days=get_settings().refresh_token_days))
+    return create_token(
+        subject, "refresh", timedelta(days=get_settings().refresh_token_days)
+    )
 
 
 def decode_token(token: str, expected_type: str = "access") -> str:

@@ -1,4 +1,5 @@
 """Create support system tables."""
+
 import sqlalchemy as sa
 
 from alembic import op
@@ -18,7 +19,9 @@ def upgrade() -> None:
         sa.Column("password_hash", sa.String(255), nullable=False),
         sa.Column("refresh_token_hash", sa.String(64)),
         sa.Column("role", sa.String(16), nullable=False, server_default="user"),
-        sa.Column("failed_login_attempts", sa.Integer(), nullable=False, server_default="0"),
+        sa.Column(
+            "failed_login_attempts", sa.Integer(), nullable=False, server_default="0"
+        ),
         sa.Column("locked_until", sa.DateTime(timezone=True)),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
@@ -27,7 +30,9 @@ def upgrade() -> None:
         "conversations",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
-        sa.Column("title", sa.String(160), nullable=False, server_default="New conversation"),
+        sa.Column(
+            "title", sa.String(160), nullable=False, server_default="New conversation"
+        ),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
     )
@@ -35,7 +40,12 @@ def upgrade() -> None:
     op.create_table(
         "messages",
         sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("conversation_id", sa.Integer(), sa.ForeignKey("conversations.id"), nullable=False),
+        sa.Column(
+            "conversation_id",
+            sa.Integer(),
+            sa.ForeignKey("conversations.id"),
+            nullable=False,
+        ),
         sa.Column("sender", sa.String(16), nullable=False),
         sa.Column("body", sa.Text(), nullable=False),
         sa.Column("category", sa.String(64)),
@@ -48,8 +58,16 @@ def upgrade() -> None:
         "tickets",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
-        sa.Column("conversation_id", sa.Integer(), sa.ForeignKey("conversations.id"), nullable=False, unique=True),
-        sa.Column("subject", sa.String(160), nullable=False, server_default="Support request"),
+        sa.Column(
+            "conversation_id",
+            sa.Integer(),
+            sa.ForeignKey("conversations.id"),
+            nullable=False,
+            unique=True,
+        ),
+        sa.Column(
+            "subject", sa.String(160), nullable=False, server_default="Support request"
+        ),
         sa.Column("category", sa.String(64), nullable=False),
         sa.Column("priority", sa.String(16), nullable=False, server_default="normal"),
         sa.Column("status", sa.String(16), nullable=False, server_default="open"),
@@ -62,7 +80,9 @@ def upgrade() -> None:
     op.create_table(
         "ticket_replies",
         sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("ticket_id", sa.Integer(), sa.ForeignKey("tickets.id"), nullable=False),
+        sa.Column(
+            "ticket_id", sa.Integer(), sa.ForeignKey("tickets.id"), nullable=False
+        ),
         sa.Column("admin_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=False),
         sa.Column("text", sa.Text(), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),

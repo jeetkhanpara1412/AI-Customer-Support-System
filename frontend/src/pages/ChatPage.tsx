@@ -9,7 +9,11 @@ import { api, type ChatResult } from '../api/client'
 import { useAuthStore } from '../store/auth'
 
 const chatSchema = z.object({
-  message: z.string().trim().min(1, 'Enter a message').max(1000, 'Maximum 1000 characters'),
+  message: z
+    .string()
+    .trim()
+    .min(1, 'Enter a message')
+    .max(1000, 'Maximum 1000 characters'),
 })
 
 type ChatValues = z.infer<typeof chatSchema>
@@ -33,7 +37,9 @@ export function ChatPage() {
   const user = useAuthStore((state) => state.user)
   const [lines, setLines] = useState<ChatLine[]>([])
   const [conversationId, setConversationId] = useState<number>()
-  const [connection, setConnection] = useState<'connecting' | 'connected' | 'offline'>('connecting')
+  const [connection, setConnection] = useState<
+    'connecting' | 'connected' | 'offline'
+  >('connecting')
   const [typing, setTyping] = useState(false)
   const [socketError, setSocketError] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -46,21 +52,32 @@ export function ChatPage() {
   })
   const conversations = useQuery({
     queryKey: ['conversations'],
-    queryFn: async () => (await api.get<{ id: number; title: string; updated_at: string }[]>('/conversations')).data,
+    queryFn: async () =>
+      (
+        await api.get<{ id: number; title: string; updated_at: string }[]>(
+          '/conversations',
+        )
+      ).data,
   })
   const mutation = useMutation({
-    mutationFn: async (request: { message: string; alreadyRendered: boolean }) => (
-      await api.post<ChatResult>('/chat', {
-        message: request.message,
-        conversation_id: conversationId,
-      })
-    ).data,
+    mutationFn: async (request: {
+      message: string
+      alreadyRendered: boolean
+    }) =>
+      (
+        await api.post<ChatResult>('/chat', {
+          message: request.message,
+          conversation_id: conversationId,
+        })
+      ).data,
     onSuccess: (result, { message, alreadyRendered }) => {
       setConversationId(result.conversation_id)
       pendingSocketMessage.current = null
       setLines((previous) => [
         ...previous,
-        ...(alreadyRendered ? [] : [{ id: `u-${Date.now()}`, role: 'user' as const, text: message }]),
+        ...(alreadyRendered
+          ? []
+          : [{ id: `u-${Date.now()}`, role: 'user' as const, text: message }]),
         {
           id: `a-${result.message_id}`,
           role: 'assistant',
@@ -85,7 +102,9 @@ export function ChatPage() {
     const connect = () => {
       if (disposed) return
       setConnection('connecting')
-      const wsBase = import.meta.env.VITE_WS_URL || `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/chat`
+      const wsBase =
+        import.meta.env.VITE_WS_URL ||
+        `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/chat`
       const ws = new WebSocket(wsBase)
       socket.current = ws
       ws.onopen = () => {
@@ -107,25 +126,31 @@ export function ChatPage() {
         }
         if (data.type === 'agent_message') {
           setTyping(false)
-          setLines((previous) => [...previous, {
-            id: `agent-${Date.now()}`,
-            role: 'agent',
-            text: data.text || '',
-          }])
+          setLines((previous) => [
+            ...previous,
+            {
+              id: `agent-${Date.now()}`,
+              role: 'agent',
+              text: data.text || '',
+            },
+          ])
           return
         }
         if (data.type === 'assistant_message') {
           pendingSocketMessage.current = null
           setConversationId(data.conversation_id)
           setTyping(false)
-          setLines((previous) => [...previous, {
-            id: `assistant-${data.message_id}`,
-            role: 'assistant',
-            text: data.reply,
-            category: data.category,
-            confidence: data.confidence,
-            escalated: data.escalated,
-          }])
+          setLines((previous) => [
+            ...previous,
+            {
+              id: `assistant-${data.message_id}`,
+              role: 'assistant',
+              text: data.reply,
+              category: data.category,
+              confidence: data.confidence,
+              escalated: data.escalated,
+            },
+          ])
           queryClient.invalidateQueries({ queryKey: ['tickets'] })
           queryClient.invalidateQueries({ queryKey: ['conversations'] })
         }
@@ -162,7 +187,14 @@ export function ChatPage() {
     setSocketError('')
     try {
       const { data } = await api.get<{
-        messages: { id: number; role: ChatLine['role']; text: string; category?: string; confidence?: number; escalated?: boolean }[]
+        messages: {
+          id: number
+          role: ChatLine['role']
+          text: string
+          category?: string
+          confidence?: number
+          escalated?: boolean
+        }[]
       }>(`/conversations/${id}`)
       setLines(data.messages.map((line) => ({ ...line, id: String(line.id) })))
     } catch {
@@ -172,15 +204,20 @@ export function ChatPage() {
 
   function submit({ message }: ChatValues) {
     if (socket.current?.readyState === WebSocket.OPEN) {
-      setLines((previous) => [...previous, { id: `user-${Date.now()}`, role: 'user', text: message }])
+      setLines((previous) => [
+        ...previous,
+        { id: `user-${Date.now()}`, role: 'user', text: message },
+      ])
       setTyping(true)
       setSocketError('')
       pendingSocketMessage.current = message
-      socket.current.send(JSON.stringify({
-        type: 'user_message',
-        text: message,
-        conversation_id: conversationId,
-      }))
+      socket.current.send(
+        JSON.stringify({
+          type: 'user_message',
+          text: message,
+          conversation_id: conversationId,
+        }),
+      )
     } else {
       mutation.mutate({ message, alreadyRendered: false })
     }
@@ -189,60 +226,147 @@ export function ChatPage() {
 
   return (
     <div className="chat-shell">
-      <aside className={`chat-sidebar ${sidebarOpen ? 'chat-sidebar-open' : ''}`} aria-label="Conversation history">
+      <aside
+        className={`chat-sidebar ${sidebarOpen ? 'chat-sidebar-open' : ''}`}
+        aria-label="Conversation history"
+      >
         <div className="flex items-center justify-between gap-2">
-          <strong className="text-lg text-indigo-800 dark:text-indigo-200">SupportAI</strong>
-          <button type="button" className="button-primary" onClick={newConversation}>New chat</button>
+          <strong className="text-lg text-indigo-800 dark:text-indigo-200">
+            SupportAI
+          </strong>
+          <button
+            type="button"
+            className="button-primary"
+            onClick={newConversation}
+          >
+            New chat
+          </button>
         </div>
-        <p className="mt-8 text-xs font-semibold uppercase tracking-wider text-slate-500">Recent</p>
-        {conversations.isLoading ? <p role="status" className="mt-3 text-sm">Loading conversations…</p>
-          : conversations.isError ? <p role="alert" className="mt-3 text-sm">History could not be loaded.</p>
-            : <ul className="mt-2 space-y-1">
-              {conversations.data?.map((item) => (
-                <li key={item.id}>
-                  <button
-                    className={`conversation-link ${conversationId === item.id ? 'conversation-active' : ''}`}
-                    type="button"
-                    onClick={() => {
-                      setSidebarOpen(false)
-                      void openConversation(item.id)
-                    }}
-                  >
-                    {item.title || 'Conversation'}
-                  </button>
-                </li>
-              ))}
-            </ul>}
+        <p className="mt-8 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          Recent
+        </p>
+        {conversations.isLoading ? (
+          <p role="status" className="mt-3 text-sm">
+            Loading conversations…
+          </p>
+        ) : conversations.isError ? (
+          <p role="alert" className="mt-3 text-sm">
+            History could not be loaded.
+          </p>
+        ) : (
+          <ul className="mt-2 space-y-1">
+            {conversations.data?.map((item) => (
+              <li key={item.id}>
+                <button
+                  className={`conversation-link ${conversationId === item.id ? 'conversation-active' : ''}`}
+                  type="button"
+                  onClick={() => {
+                    setSidebarOpen(false)
+                    void openConversation(item.id)
+                  }}
+                >
+                  {item.title || 'Conversation'}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
         <div className="mt-auto border-t border-slate-200 pt-4 dark:border-slate-700">
           <p className="font-medium">{user?.name}</p>
-          <Link className="mt-2 inline-block text-sm text-indigo-700 underline dark:text-indigo-300" to="/tickets">My tickets</Link>
+          <Link
+            className="mt-2 inline-block text-sm text-indigo-700 underline dark:text-indigo-300"
+            to="/tickets"
+          >
+            My tickets
+          </Link>
         </div>
       </aside>
       <section className="min-w-0 flex-1">
         <header className="chat-header">
           <div className="flex min-w-0 items-center gap-3">
-            <button type="button" className="button-secondary mobile-sidebar-toggle" aria-label="Toggle conversation history" aria-expanded={sidebarOpen} onClick={() => setSidebarOpen((open) => !open)}>History</button>
-            <h1 className="truncate font-semibold">{conversationId ? 'Support conversation' : 'New conversation'}</h1>
+            <button
+              type="button"
+              className="button-secondary mobile-sidebar-toggle"
+              aria-label="Toggle conversation history"
+              aria-expanded={sidebarOpen}
+              onClick={() => setSidebarOpen((open) => !open)}
+            >
+              History
+            </button>
+            <h1 className="truncate font-semibold">
+              {conversationId ? 'Support conversation' : 'New conversation'}
+            </h1>
           </div>
-          <span className={connection === 'connected' ? 'live-pill' : 'offline-pill'}>{connection === 'connected' ? 'Live' : 'Reconnecting'}</span>
+          <span
+            className={
+              connection === 'connected' ? 'live-pill' : 'offline-pill'
+            }
+          >
+            {connection === 'connected' ? 'Live' : 'Reconnecting'}
+          </span>
         </header>
         <div className="chat-content">
           <div className="chat-messages" aria-live="polite">
-            {lines.length === 0 && <div className="empty-chat"><h2>How can we help?</h2><p>Send a message and our support assistant will get started.</p></div>}
-            {lines.map((line) => <ChatBubble line={line} key={line.id} />)}
-            {(typing || mutation.isPending) && <p className="typing-indicator" role="status">Support is typing…</p>}
+            {lines.length === 0 && (
+              <div className="empty-chat">
+                <h2>How can we help?</h2>
+                <p>
+                  Send a message and our support assistant will get started.
+                </p>
+              </div>
+            )}
+            {lines.map((line) => (
+              <ChatBubble line={line} key={line.id} />
+            ))}
+            {(typing || mutation.isPending) && (
+              <p className="typing-indicator" role="status">
+                Support is typing…
+              </p>
+            )}
           </div>
-          {socketError && <p className="mb-2 text-sm text-red-700" role="alert">{socketError} {connection !== 'connected' && 'Your next message will use the secure REST fallback.'}</p>}
-          {mutation.isError && <p className="mb-2 text-sm text-red-700" role="alert">Message could not be sent. Please retry.</p>}
-          <form className="chat-composer" onSubmit={(event) => {
-            event.preventDefault()
-            void form.handleSubmit(submit)(event)
-          }}>
-            <label className="sr-only" htmlFor="chat-message">Message</label>
-            <input id="chat-message" className="min-w-0 flex-1" maxLength={1000} aria-invalid={Boolean(form.formState.errors.message)} placeholder="Write your message…" {...form.register('message')} />
-            <button className="button-primary min-h-11" type="submit" disabled={mutation.isPending || typing}>Send</button>
+          {socketError && (
+            <p className="mb-2 text-sm text-red-700" role="alert">
+              {socketError}{' '}
+              {connection !== 'connected' &&
+                'Your next message will use the secure REST fallback.'}
+            </p>
+          )}
+          {mutation.isError && (
+            <p className="mb-2 text-sm text-red-700" role="alert">
+              Message could not be sent. Please retry.
+            </p>
+          )}
+          <form
+            className="chat-composer"
+            onSubmit={(event) => {
+              event.preventDefault()
+              void form.handleSubmit(submit)(event)
+            }}
+          >
+            <label className="sr-only" htmlFor="chat-message">
+              Message
+            </label>
+            <input
+              id="chat-message"
+              className="min-w-0 flex-1"
+              maxLength={1000}
+              aria-invalid={Boolean(form.formState.errors.message)}
+              placeholder="Write your message…"
+              {...form.register('message')}
+            />
+            <button
+              className="button-primary min-h-11"
+              type="submit"
+              disabled={mutation.isPending || typing}
+            >
+              Send
+            </button>
           </form>
-          {form.formState.errors.message && <p className="mt-2 text-sm text-red-700" role="alert">{form.formState.errors.message.message}</p>}
+          {form.formState.errors.message && (
+            <p className="mt-2 text-sm text-red-700" role="alert">
+              {form.formState.errors.message.message}
+            </p>
+          )}
         </div>
       </section>
     </div>
@@ -250,22 +374,33 @@ export function ChatPage() {
 }
 
 export function ChatBubble({ line }: { line: ChatLine }) {
-  const bubbleClass = line.role === 'user'
-    ? 'chat-bubble chat-bubble-user'
-    : line.role === 'agent'
-      ? 'chat-bubble chat-bubble-agent'
-      : 'chat-bubble chat-bubble-assistant'
+  const bubbleClass =
+    line.role === 'user'
+      ? 'chat-bubble chat-bubble-user'
+      : line.role === 'agent'
+        ? 'chat-bubble chat-bubble-agent'
+        : 'chat-bubble chat-bubble-assistant'
   return (
-    <article className={`chat-line ${line.role === 'user' ? 'chat-line-user' : ''}`}>
+    <article
+      className={`chat-line ${line.role === 'user' ? 'chat-line-user' : ''}`}
+    >
       <div className={bubbleClass}>
-        {line.role === 'agent' && <p className="mb-1 text-xs font-semibold">Support agent</p>}
+        {line.role === 'agent' && (
+          <p className="mb-1 text-xs font-semibold">Support agent</p>
+        )}
         <p className="whitespace-pre-wrap">{line.text}</p>
       </div>
-      {line.category && <div className="mt-2 flex flex-wrap gap-2">
-        <span className="badge badge-primary">{line.category}</span>
-        <span className="badge badge-neutral">{Math.round((line.confidence ?? 0) * 100)}% confidence</span>
-        {line.escalated && <span className="badge badge-warning">Escalated to human</span>}
-      </div>}
+      {line.category && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          <span className="badge badge-primary">{line.category}</span>
+          <span className="badge badge-neutral">
+            {Math.round((line.confidence ?? 0) * 100)}% confidence
+          </span>
+          {line.escalated && (
+            <span className="badge badge-warning">Escalated to human</span>
+          )}
+        </div>
+      )}
     </article>
   )
 }

@@ -42,7 +42,9 @@ def load_test_set(path: Path = EVAL_PATH) -> tuple[list[str], list[str]]:
                 messages.append(message)
                 categories.append(category)
     if len(messages) < 150:
-        raise ValueError(f"Evaluation set must contain at least 150 messages; found {len(messages)}")
+        raise ValueError(
+            f"Evaluation set must contain at least 150 messages; found {len(messages)}"
+        )
     unknown = set(categories) - set(LABELS)
     if unknown:
         raise ValueError(f"Unknown evaluation labels: {', '.join(sorted(unknown))}")
@@ -51,7 +53,9 @@ def load_test_set(path: Path = EVAL_PATH) -> tuple[list[str], list[str]]:
 
 def evaluate() -> int:
     if not ARTIFACT_PATH.exists():
-        raise FileNotFoundError(f"Trained model not found: {ARTIFACT_PATH}; run python -m app.ml.train first")
+        raise FileNotFoundError(
+            f"Trained model not found: {ARTIFACT_PATH}; run python -m app.ml.train first"
+        )
     messages, expected = load_test_set()
     classifier = SupportCategoryClassifier()
     retriever = TicketRetriever(
@@ -74,10 +78,14 @@ def evaluate() -> int:
         modes.append(decisions.decide(result.confidence, similarity, result.category))
 
     accuracy = float(accuracy_score(expected, predicted))
-    fraud_indexes = [index for index, category in enumerate(expected) if category == "Security / Fraud"]
-    fraud_recall = sum(predicted[index] == "Security / Fraud" for index in fraud_indexes) / max(
-        len(fraud_indexes), 1
-    )
+    fraud_indexes = [
+        index
+        for index, category in enumerate(expected)
+        if category == "Security / Fraud"
+    ]
+    fraud_recall = sum(
+        predicted[index] == "Security / Fraud" for index in fraud_indexes
+    ) / max(len(fraud_indexes), 1)
     escalation_rate = sum(mode == "fallback" for mode in modes) / len(modes)
     wrong_answer_rate = sum(
         mode == "matched" and expected[index] != predicted[index]
@@ -98,23 +106,33 @@ def evaluate() -> int:
     print("Per-category accuracy:")
     counts = Counter(expected)
     correct = Counter(
-        category for category, result in zip(expected, predicted, strict=True) if category == result
+        category
+        for category, result in zip(expected, predicted, strict=True)
+        if category == result
     )
     for category in LABELS:
         if counts[category]:
-            print(f"  {category}: {correct[category] / counts[category]:.4f} ({correct[category]}/{counts[category]})")
+            print(
+                f"  {category}: {correct[category] / counts[category]:.4f} ({correct[category]}/{counts[category]})"
+            )
     failures = [
         (message, truth, guess, mode)
-        for message, truth, guess, mode in zip(messages, expected, predicted, modes, strict=True)
+        for message, truth, guess, mode in zip(
+            messages, expected, predicted, modes, strict=True
+        )
         if truth != guess
     ]
     if failures:
         print("\nMisclassified evaluation messages:")
         for message, truth, guess, mode in failures:
-            print(f"  expected={truth!r}, predicted={guess!r}, mode={mode!r}: {message}")
+            print(
+                f"  expected={truth!r}, predicted={guess!r}, mode={mode!r}: {message}"
+            )
 
     if accuracy < 0.88 or fraud_recall < 1.0:
-        print("\nEvaluation failed: require accuracy >= 0.88 and Security / Fraud recall == 1.00.")
+        print(
+            "\nEvaluation failed: require accuracy >= 0.88 and Security / Fraud recall == 1.00."
+        )
         return 1
     print("\nEvaluation passed.")
     return 0

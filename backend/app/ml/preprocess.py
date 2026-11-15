@@ -9,7 +9,10 @@ _REPLACEMENTS = (
     (r"\bpackage\b", "order"),
     (r"\bsuspicious charge\b|\bunrecognized charge\b", "fraud charge"),
     (r"\bunauthorized transaction\b", "fraud transaction"),
-    (r"\bunauthorized access\b|\bcompromised account\b|\bhacked account\b", "fraud account"),
+    (
+        r"\bunauthorized access\b|\bcompromised account\b|\bhacked account\b",
+        "fraud account",
+    ),
 )
 _COMMON_TYPOS = (
     (r"\bchnage\b", "change"),
@@ -34,4 +37,6 @@ def preprocess_text(text: str) -> str:
     normalized = re.sub(r"\s+", " ", normalized).strip()
     for pattern, replacement in _REPLACEMENTS:
         normalized = re.sub(pattern, replacement, normalized)
-    return " ".join(token for token in normalized.split() if token not in ENGLISH_STOP_WORDS)
+    return " ".join(
+        token for token in normalized.split() if token not in ENGLISH_STOP_WORDS
+    )

@@ -57,7 +57,9 @@ def test_register_login_and_csrf_protected_refresh(client: TestClient):
 
 
 def test_validation_error_uses_contract_shape(client: TestClient):
-    response = client.post("/api/auth/register", json={"name": "", "email": "invalid", "password": "short"})
+    response = client.post(
+        "/api/auth/register", json={"name": "", "email": "invalid", "password": "short"}
+    )
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "validation_error"
 
@@ -99,15 +101,22 @@ def test_fraud_chat_creates_high_priority_ticket(client: TestClient):
     assert tickets.json()[0]["priority"] == "high"
 
 
-def test_chat_remembers_context_and_switches_explicit_follow_up_topic(client: TestClient):
+def test_chat_remembers_context_and_switches_explicit_follow_up_topic(
+    client: TestClient,
+):
     _, token = register_and_login(client)
     headers = {"Authorization": f"Bearer {token}"}
-    first = client.post("/api/chat", headers=headers, json={"message": "I was charged twice"}).json()
+    first = client.post(
+        "/api/chat", headers=headers, json={"message": "I was charged twice"}
+    ).json()
     assert first["category"] == "Payment Issue"
     second = client.post(
         "/api/chat",
         headers=headers,
-        json={"message": "what about refunds?", "conversation_id": first["conversation_id"]},
+        json={
+            "message": "what about refunds?",
+            "conversation_id": first["conversation_id"],
+        },
     ).json()
     assert second["category"] == "Refund"
     assert second["conversation_id"] == first["conversation_id"]
@@ -122,7 +131,12 @@ def test_user_cannot_read_other_conversations_or_admin_routes(client: TestClient
         json={"message": "How can I contact support?"},
     ).json()
     headers = {"Authorization": f"Bearer {other_token}"}
-    assert client.get(f"/api/conversations/{chat['conversation_id']}", headers=headers).status_code == 404
+    assert (
+        client.get(
+            f"/api/conversations/{chat['conversation_id']}", headers=headers
+        ).status_code
+        == 404
+    )
     assert client.get("/api/admin/stats", headers=headers).status_code == 403
 
 
@@ -138,7 +152,9 @@ def test_admin_can_manage_ticket_reply_status_and_stats(client: TestClient):
     ).json()
     ticket_id = chat["ticket_id"]
 
-    listed = client.get("/api/admin/tickets?priority=high&page=1", headers=admin_headers)
+    listed = client.get(
+        "/api/admin/tickets?priority=high&page=1", headers=admin_headers
+    )
     assert listed.status_code == 200
     assert listed.json()[0]["subject"]
     updated = client.patch(
@@ -155,16 +171,35 @@ def test_admin_can_manage_ticket_reply_status_and_stats(client: TestClient):
     )
     assert reply.status_code == 200
     user_ticket = client.get(f"/api/tickets/{ticket_id}", headers=owner_headers)
-    assert user_ticket.json()["replies"][0]["text"] == "A support specialist is reviewing this report."
+    assert (
+        user_ticket.json()["replies"][0]["text"]
+        == "A support specialist is reviewing this report."
+    )
     stats = client.get("/api/admin/stats", headers=admin_headers)
     assert stats.status_code == 200
-    assert set(stats.json()) == {"open_tickets", "resolved_today", "escalation_rate", "avg_confidence", "by_category"}
+    assert set(stats.json()) == {
+        "open_tickets",
+        "resolved_today",
+        "escalation_rate",
+        "avg_confidence",
+        "by_category",
+    }
 
 
 def test_logout_revokes_refresh_token(client: TestClient):
     _, token = register_and_login(client)
-    assert client.post("/api/auth/logout", headers={"Authorization": f"Bearer {token}"}).status_code == 204
-    assert client.post("/api/auth/refresh", headers={"X-Requested-With": "fetch"}).status_code == 401
+    assert (
+        client.post(
+            "/api/auth/logout", headers={"Authorization": f"Bearer {token}"}
+        ).status_code
+        == 204
+    )
+    assert (
+        client.post(
+            "/api/auth/refresh", headers={"X-Requested-With": "fetch"}
+        ).status_code
+        == 401
+    )
 
 
 def test_websocket_rejects_missing_auth(client: TestClient):
@@ -178,7 +213,11 @@ def test_websocket_rejects_missing_auth(client: TestClient):
 def test_login_is_rate_limited_per_email(client: TestClient):
     email = f"{uuid4().hex}@example.com"
     for _ in range(5):
-        response = client.post("/api/auth/login", json={"email": email, "password": "WrongPassword123"})
+        response = client.post(
+            "/api/auth/login", json={"email": email, "password": "WrongPassword123"}
+        )
         assert response.status_code == 401
-    response = client.post("/api/auth/login", json={"email": email, "password": "WrongPassword123"})
+    response = client.post(
+        "/api/auth/login", json={"email": email, "password": "WrongPassword123"}
+    )
     assert response.status_code == 429

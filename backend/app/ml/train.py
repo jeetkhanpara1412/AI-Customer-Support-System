@@ -29,7 +29,9 @@ def _read_rows(csv_path: str | Path) -> tuple[list[str], list[str]]:
                 categories.append(category)
     counts = {category: categories.count(category) for category in set(categories)}
     if len(counts) < 2 or min(counts.values()) < 4:
-        raise ValueError("Training data must contain at least two categories and four examples per category")
+        raise ValueError(
+            "Training data must contain at least two categories and four examples per category"
+        )
     return messages, categories
 
 
@@ -109,7 +111,9 @@ def ensure_model() -> Path:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Train the customer support category model")
+    parser = argparse.ArgumentParser(
+        description="Train the customer support category model"
+    )
     parser.add_argument("--data", type=Path, default=DATA_PATH)
     parser.add_argument("--output", type=Path, default=ARTIFACT_DIR)
     arguments = parser.parse_args()

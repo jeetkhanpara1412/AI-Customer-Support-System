@@ -31,7 +31,9 @@ class SupportCategoryClassifier:
     ):
         self.artifact_path = Path(artifact_path)
         if not self.artifact_path.exists():
-            raise FileNotFoundError(f"Trained classifier artifact not found: {self.artifact_path}")
+            raise FileNotFoundError(
+                f"Trained classifier artifact not found: {self.artifact_path}"
+            )
         artifact = joblib.load(self.artifact_path)
         self.pipeline = artifact["classifier"]
         self.char_vectorizer = artifact["char_vectorizer"]

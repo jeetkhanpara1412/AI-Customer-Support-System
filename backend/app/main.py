@@ -37,7 +37,9 @@ async def lifespan(_: FastAPI):
             db.commit()
         settings = get_settings()
         if settings.first_admin_email and settings.first_admin_password:
-            existing = db.scalar(select(User).where(User.email == settings.first_admin_email.lower()))
+            existing = db.scalar(
+                select(User).where(User.email == settings.first_admin_email.lower())
+            )
             if existing is None:
                 from app.core.security import hash_password
 
@@ -57,16 +59,33 @@ async def lifespan(_: FastAPI):
 def create_app() -> FastAPI:
     configure_logging()
     settings = get_settings()
-    application = FastAPI(title="AI Customer Support System", version="1.0.0", lifespan=lifespan)
+    application = FastAPI(
+        title="AI Customer Support System", version="1.0.0", lifespan=lifespan
+    )
     application.state.limiter = limiter
 
     @application.exception_handler(HTTPException)
     async def http_error(_: Request, exc: HTTPException):
-        codes = {401: "unauthorized", 403: "forbidden", 404: "not_found", 409: "conflict", 429: "rate_limited"}
-        message = exc.detail if isinstance(exc.detail, str) else "Request could not be completed"
+        codes = {
+            401: "unauthorized",
+            403: "forbidden",
+            404: "not_found",
+            409: "conflict",
+            429: "rate_limited",
+        }
+        message = (
+            exc.detail
+            if isinstance(exc.detail, str)
+            else "Request could not be completed"
+        )
         return JSONResponse(
             status_code=exc.status_code,
-            content={"error": {"code": codes.get(exc.status_code, "request_error"), "message": message}},
+            content={
+                "error": {
+                    "code": codes.get(exc.status_code, "request_error"),
+                    "message": message,
+                }
+            },
             headers=exc.headers,
         )
 
@@ -74,15 +93,23 @@ def create_app() -> FastAPI:
     async def validation_error(_: Request, __: RequestValidationError):
         return JSONResponse(
             status_code=422,
-            content={"error": {"code": "validation_error", "message": "Invalid request data"}},
+            content={
+                "error": {"code": "validation_error", "message": "Invalid request data"}
+            },
         )
 
     @application.exception_handler(RateLimitExceeded)
     async def rate_limit_error(_: Request, __: RateLimitExceeded):
         return JSONResponse(
             status_code=429,
-            content={"error": {"code": "rate_limited", "message": "Too many requests; please try again later"}},
+            content={
+                "error": {
+                    "code": "rate_limited",
+                    "message": "Too many requests; please try again later",
+                }
+            },
         )
+
     application.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
@@ -103,15 +130,24 @@ def create_app() -> FastAPI:
             "img-src 'self' data:; connect-src 'self' ws: wss:"
         )
         if settings.env.lower() == "production":
-            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+            response.headers["Strict-Transport-Security"] = (
+                "max-age=31536000; includeSubDomains"
+            )
         return response
 
     @application.exception_handler(Exception)
     async def unexpected_error(request: Request, exc: Exception):
-        logger.bind(path=request.url.path, exception=type(exc).__name__).error("Unhandled request error")
+        logger.bind(path=request.url.path, exception=type(exc).__name__).error(
+            "Unhandled request error"
+        )
         return JSONResponse(
             status_code=500,
-            content={"error": {"code": "internal_error", "message": "An unexpected error occurred"}},
+            content={
+                "error": {
+                    "code": "internal_error",
+                    "message": "An unexpected error occurred",
+                }
+            },
         )
 
     application.include_router(auth.router, prefix="/api")

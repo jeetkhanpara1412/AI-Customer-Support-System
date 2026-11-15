@@ -50,9 +50,7 @@ class ResponseGenerator:
             return "Could you share a little more detail so I can point you to the right help?"
         if response_mode == "default":
             return self.get_default_response(category)
-        return (
-            "I’m not confident I understood that. I’ve asked a support specialist to follow up and help you."
-        )
+        return "I’m not confident I understood that. I’ve asked a support specialist to follow up and help you."
 
     @staticmethod
     def get_default_response(category: str) -> str:

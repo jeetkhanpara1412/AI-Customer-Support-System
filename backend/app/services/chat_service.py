@@ -23,7 +23,9 @@ from app.services.ticket_service import create_escalation_ticket
 _lock = threading.RLock()
 _classifier: SupportCategoryClassifier | None = None
 _retriever: TicketRetriever | None = None
-_cache = Redis.from_url(get_settings().redis_url, socket_connect_timeout=1, socket_timeout=1)
+_cache = Redis.from_url(
+    get_settings().redis_url, socket_connect_timeout=1, socket_timeout=1
+)
 
 
 def initialize_ml(db: Session | None = None) -> None:
@@ -35,12 +37,16 @@ def initialize_ml(db: Session | None = None) -> None:
             _retriever = TicketRetriever(DATA_PATH)
         else:
             entries = db.scalars(
-                select(KnowledgeEntry).where(KnowledgeEntry.enabled.is_(True)).order_by(KnowledgeEntry.id)
+                select(KnowledgeEntry)
+                .where(KnowledgeEntry.enabled.is_(True))
+                .order_by(KnowledgeEntry.id)
             ).all()
             _retriever = TicketRetriever(entries or [])
 
 
-def process_chat(db: Session, user: User, text: str, conversation_id: int | None = None) -> dict:
+def process_chat(
+    db: Session, user: User, text: str, conversation_id: int | None = None
+) -> dict:
     global _classifier, _retriever
     if _classifier is None or _retriever is None:
         initialize_ml(db)
@@ -82,22 +88,30 @@ def process_chat(db: Session, user: User, text: str, conversation_id: int | None
     if follow_up.selected_category:
         alternatives = classifier.predict_top_k(follow_up.query, top_k=3)
         selected_score = next(
-            (score for category, score in alternatives if category == follow_up.selected_category),
+            (
+                score
+                for category, score in alternatives
+                if category == follow_up.selected_category
+            ),
             0.60,
         )
         confidence = (
             1.0
-            if follow_up.selected_category in {"Greeting", "Thanks / Goodbye", "Out of Scope", "Security / Fraud"}
+            if follow_up.selected_category
+            in {"Greeting", "Thanks / Goodbye", "Out of Scope", "Security / Fraud"}
             else max(0.60, selected_score)
         )
         prediction = IntentPrediction(
             follow_up.selected_category,
             confidence,
-            [(follow_up.selected_category, confidence), *[
-                (category, score)
-                for category, score in alternatives
-                if category != follow_up.selected_category
-            ][:2]],
+            [
+                (follow_up.selected_category, confidence),
+                *[
+                    (category, score)
+                    for category, score in alternatives
+                    if category != follow_up.selected_category
+                ][:2],
+            ],
         )
     else:
         prediction = predict_intent(follow_up.query, classifier)
@@ -111,16 +125,25 @@ def process_chat(db: Session, user: User, text: str, conversation_id: int | None
         answer_similarity=settings.answer_similarity_threshold,
         clarify_confidence=settings.clarify_confidence_threshold,
     )
-    if category not in {"Security / Fraud", "Greeting", "Thanks / Goodbye", "Out of Scope"}:
+    if category not in {
+        "Security / Fraud",
+        "Greeting",
+        "Thanks / Goodbye",
+        "Out of Scope",
+    }:
         cache_key = (
             f"support-answer:{category}:"
-            + hashlib.sha256(classifier.preprocess(follow_up.query).encode()).hexdigest()
+            + hashlib.sha256(
+                classifier.preprocess(follow_up.query).encode()
+            ).hexdigest()
         )
         try:
             serialized = _cache.get(cache_key)
             cached = json.loads(serialized) if serialized else None
         except Exception as exc:
-            logger.bind(exception=type(exc).__name__).warning("Support response cache unavailable")
+            logger.bind(exception=type(exc).__name__).warning(
+                "Support response cache unavailable"
+            )
     if cached and cached.get("mode") in {"matched", "default"}:
         category = str(cached["category"])
         confidence = float(cached["confidence"])
@@ -138,11 +161,13 @@ def process_chat(db: Session, user: User, text: str, conversation_id: int | None
         if mode == "clarify":
             options = conversation.pending_clarification or []
         if mode == "clarify" and not options:
-            options = list(dict.fromkeys(
-                item_category
-                for item_category, _ in prediction.alternatives
-                if item_category != category
-            ))[:2]
+            options = list(
+                dict.fromkeys(
+                    item_category
+                    for item_category, _ in prediction.alternatives
+                    if item_category != category
+                )
+            )[:2]
             options.insert(0, category)
             options = options[:2]
         matched_response = matches[0].response if matches else ""
@@ -169,13 +194,17 @@ def process_chat(db: Session, user: User, text: str, conversation_id: int | None
                     ),
                 )
             except Exception as exc:
-                logger.bind(exception=type(exc).__name__).warning("Support response cache unavailable")
+                logger.bind(exception=type(exc).__name__).warning(
+                    "Support response cache unavailable"
+                )
     escalated = mode == "fallback"
 
     conversation.current_topic = category
     conversation.pending_clarification = options if mode == "clarify" else None
     conversation.updated_at = datetime.now(UTC)
-    user_message = Message(conversation_id=conversation.id, sender="user", body=clean_text)
+    user_message = Message(
+        conversation_id=conversation.id, sender="user", body=clean_text
+    )
     assistant_message = Message(
         conversation_id=conversation.id,
         sender="assistant",
@@ -200,19 +229,25 @@ def process_chat(db: Session, user: User, text: str, conversation_id: int | None
         "reply": reply,
         "mode": mode,
         "escalated": escalated,
-        "ticket_id": ticket.id if ticket else (conversation.ticket.id if conversation.ticket else None),
+        "ticket_id": ticket.id
+        if ticket
+        else (conversation.ticket.id if conversation.ticket else None),
         "options": options,
     }
 
 
 def rebuild_knowledge_base(db: Session) -> tuple[float, int]:
-    entries = db.scalars(select(KnowledgeEntry).where(KnowledgeEntry.enabled.is_(True))).all()
+    entries = db.scalars(
+        select(KnowledgeEntry).where(KnowledgeEntry.enabled.is_(True))
+    ).all()
     if not entries:
         raise ValueError("Knowledge base cannot be empty")
     temporary_path = DATA_PATH.with_suffix(".tmp")
     temporary_path.parent.mkdir(parents=True, exist_ok=True)
     with temporary_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["Customer Message", "Category", "Company Response"])
+        writer = csv.DictWriter(
+            handle, fieldnames=["Customer Message", "Category", "Company Response"]
+        )
         writer.writeheader()
         writer.writerows(
             {
@@ -222,7 +257,9 @@ def rebuild_knowledge_base(db: Session) -> tuple[float, int]:
             }
             for entry in entries
         )
-    artifact, accuracy, sample_count = train_pipeline(temporary_path, return_metrics=True)
+    artifact, accuracy, sample_count = train_pipeline(
+        temporary_path, return_metrics=True
+    )
     new_classifier = SupportCategoryClassifier(artifact)
     new_retriever = TicketRetriever(entries)
     temporary_path.replace(DATA_PATH)

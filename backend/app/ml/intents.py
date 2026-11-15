@@ -59,11 +59,16 @@ _INTENT_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
     ),
     (
         "Account Access",
-        re.compile(r"\b(password|pass word|passcode|sign in|log ?in|locked out|reset my credentials)\b", re.I),
+        re.compile(
+            r"\b(password|pass word|passcode|sign in|log ?in|locked out|reset my credentials)\b",
+            re.I,
+        ),
     ),
     (
         "Account Management",
-        re.compile(r"\b(delete|deactivate|close|remove)\b.*\b(my )?(account|profile)\b", re.I),
+        re.compile(
+            r"\b(delete|deactivate|close|remove)\b.*\b(my )?(account|profile)\b", re.I
+        ),
     ),
     (
         "Account Management",
@@ -76,11 +81,17 @@ _INTENT_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
     ),
     (
         "Order / Delivery",
-        re.compile(r"\b(order|delivery|deliver|shipping|package|tracking number|parcel)\b", re.I),
+        re.compile(
+            r"\b(order|delivery|deliver|shipping|package|tracking number|parcel)\b",
+            re.I,
+        ),
     ),
     (
         "Technical Issue",
-        re.compile(r"\b(crash|crashing|bug|error|not loading|keeps freezing|won't open|does not work)\b", re.I),
+        re.compile(
+            r"\b(crash|crashing|bug|error|not loading|keeps freezing|won't open|does not work)\b",
+            re.I,
+        ),
     ),
     (
         "General Inquiry",
@@ -123,12 +134,34 @@ def predict_intent(
     explicit = explicit_intent(message)
     if explicit:
         alternatives = classifier.predict_top_k(message, top_k=3)
-        if explicit in {"Greeting", "Thanks / Goodbye", "Out of Scope", "Security / Fraud"}:
-            return IntentPrediction(explicit, 1.0, [(explicit, 1.0), *[
-                (category, score) for category, score in alternatives if category != explicit
-            ][:2]])
-        remaining = [(category, score) for category, score in alternatives if category != explicit]
-        return IntentPrediction(explicit, max(0.60, alternatives[0][1]), [(explicit, max(0.60, alternatives[0][1])), *remaining[:2]])
+        if explicit in {
+            "Greeting",
+            "Thanks / Goodbye",
+            "Out of Scope",
+            "Security / Fraud",
+        }:
+            return IntentPrediction(
+                explicit,
+                1.0,
+                [
+                    (explicit, 1.0),
+                    *[
+                        (category, score)
+                        for category, score in alternatives
+                        if category != explicit
+                    ][:2],
+                ],
+            )
+        remaining = [
+            (category, score)
+            for category, score in alternatives
+            if category != explicit
+        ]
+        return IntentPrediction(
+            explicit,
+            max(0.60, alternatives[0][1]),
+            [(explicit, max(0.60, alternatives[0][1])), *remaining[:2]],
+        )
     alternatives = classifier.predict_top_k(message, top_k=3)
     category, confidence = alternatives[0]
     return IntentPrediction(category, confidence, alternatives)

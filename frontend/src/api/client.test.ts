@@ -31,13 +31,19 @@ describe('API token refresh', () => {
     const refresh = vi.spyOn(axios, 'post').mockResolvedValue(refreshResponse)
     api.defaults.adapter = async (config) => {
       if (config.headers.Authorization !== 'Bearer fresh-token') {
-        throw new AxiosError('Unauthorized', 'ERR_BAD_REQUEST', config, undefined, {
-          data: {},
-          status: 401,
-          statusText: 'Unauthorized',
-          headers: new AxiosHeaders(),
+        throw new AxiosError(
+          'Unauthorized',
+          'ERR_BAD_REQUEST',
           config,
-        })
+          undefined,
+          {
+            data: {},
+            status: 401,
+            statusText: 'Unauthorized',
+            headers: new AxiosHeaders(),
+            config,
+          },
+        )
       }
       return {
         data: { ok: true },

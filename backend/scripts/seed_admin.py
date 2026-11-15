@@ -16,7 +16,9 @@ def main() -> None:
     email = os.environ.get("FIRST_ADMIN_EMAIL", "").strip().lower()
     password = os.environ.get("FIRST_ADMIN_PASSWORD", "")
     if not email or len(password) < 10:
-        raise SystemExit("Set FIRST_ADMIN_EMAIL and a FIRST_ADMIN_PASSWORD of at least 10 characters.")
+        raise SystemExit(
+            "Set FIRST_ADMIN_EMAIL and a FIRST_ADMIN_PASSWORD of at least 10 characters."
+        )
     Base.metadata.create_all(bind=engine)
     with SessionLocal() as db:
         user = db.scalar(select(User).where(User.email == email))

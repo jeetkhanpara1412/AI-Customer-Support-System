@@ -14,10 +14,10 @@ The Vite server runs at `http://localhost:5173`. Configure `VITE_API_URL` to the
 
 ## Environment variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| `VITE_API_URL` | `/api` | HTTP API base URL |
-| `VITE_WS_URL` | empty | Optional WebSocket URL; empty uses the current host |
+| Variable        | Default | Description                                                      |
+| --------------- | ------- | ---------------------------------------------------------------- |
+| `VITE_API_URL`  | `/api`  | HTTP API base URL                                                |
+| `VITE_WS_URL`   | empty   | Optional WebSocket URL; empty uses the current host              |
 | `VITE_USE_MOCK` | `false` | Start the MSW worker for local mock responses when set to `true` |
 
 MSW is development-only; production builds use the real API. Its worker asset is generated under `public/`.

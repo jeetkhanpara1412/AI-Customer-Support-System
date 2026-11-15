@@ -44,8 +44,14 @@ def register(request: Request, payload: RegisterRequest, db: Session = Depends(g
     email = normalize_email(str(payload.email))
     enforce_email_limit(email, "register")
     if db.scalar(select(User).where(User.email == email)):
-        raise HTTPException(status_code=409, detail="Unable to create account with those details")
-    user = User(email=email, full_name=payload.name, password_hash=hash_password(payload.password))
+        raise HTTPException(
+            status_code=409, detail="Unable to create account with those details"
+        )
+    user = User(
+        email=email,
+        full_name=payload.name,
+        password_hash=hash_password(payload.password),
+    )
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -54,7 +60,12 @@ def register(request: Request, payload: RegisterRequest, db: Session = Depends(g
 
 @router.post("/login", response_model=TokenResponse)
 @limiter.limit("5/minute")
-def login(request: Request, response: Response, payload: LoginRequest, db: Session = Depends(get_db)):
+def login(
+    request: Request,
+    response: Response,
+    payload: LoginRequest,
+    db: Session = Depends(get_db),
+):
     email = normalize_email(str(payload.email))
     enforce_email_limit(email, "login")
     user = db.scalar(select(User).where(User.email == email))
@@ -91,10 +102,14 @@ def refresh(request: Request, response: Response, db: Session = Depends(get_db))
     try:
         user_id = int(decode_token(token, "refresh"))
     except (jwt.PyJWTError, ValueError):
-        raise HTTPException(status_code=401, detail="Invalid refresh credentials") from None
+        raise HTTPException(
+            status_code=401, detail="Invalid refresh credentials"
+        ) from None
     user = db.get(User, user_id)
-    if user is None or not user.refresh_token_hash or not hmac.compare_digest(
-        user.refresh_token_hash, refresh_token_digest(token)
+    if (
+        user is None
+        or not user.refresh_token_hash
+        or not hmac.compare_digest(user.refresh_token_hash, refresh_token_digest(token))
     ):
         raise HTTPException(status_code=401, detail="Invalid refresh credentials")
     refreshed_token = create_refresh_token(str(user.id))

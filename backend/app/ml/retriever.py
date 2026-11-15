@@ -12,7 +12,9 @@ import numpy as np
 from app.ml.embeddings import MODEL_NAME, Encoder, encode_texts
 from app.ml.preprocess import correct_common_typos
 
-EMBEDDING_CACHE_PATH = Path(__file__).parent / "artifacts" / "knowledge_embeddings.joblib"
+EMBEDDING_CACHE_PATH = (
+    Path(__file__).parent / "artifacts" / "knowledge_embeddings.joblib"
+)
 
 
 @dataclass(frozen=True)
@@ -39,7 +41,9 @@ class TicketRetriever:
         encoder: Encoder | None = None,
         cache_path: str | Path = EMBEDDING_CACHE_PATH,
     ):
-        self.knowledge_base_path = Path(knowledge_base) if isinstance(knowledge_base, (str, Path)) else None
+        self.knowledge_base_path = (
+            Path(knowledge_base) if isinstance(knowledge_base, (str, Path)) else None
+        )
         self.encoder = encoder
         self.cache_path = Path(cache_path)
         self.rows: list[KnowledgeRow] = []
@@ -56,9 +60,17 @@ class TicketRetriever:
                 return [
                     KnowledgeRow(
                         id=index,
-                        message=(row.get("Customer Message") or row.get("message") or "").strip(),
-                        category=(row.get("Category") or row.get("category") or "General Inquiry").strip(),
-                        response=(row.get("Company Response") or row.get("response") or "").strip(),
+                        message=(
+                            row.get("Customer Message") or row.get("message") or ""
+                        ).strip(),
+                        category=(
+                            row.get("Category")
+                            or row.get("category")
+                            or "General Inquiry"
+                        ).strip(),
+                        response=(
+                            row.get("Company Response") or row.get("response") or ""
+                        ).strip(),
                     )
                     for index, row in enumerate(csv.DictReader(handle), start=1)
                     if (row.get("Customer Message") or row.get("message") or "").strip()
@@ -80,8 +92,12 @@ class TicketRetriever:
         value = "\0".join((row.message, row.category))
         return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
-    def reload(self, knowledge_base: str | Path | Iterable[object] | None = None) -> None:
-        source = knowledge_base if knowledge_base is not None else self.knowledge_base_path
+    def reload(
+        self, knowledge_base: str | Path | Iterable[object] | None = None
+    ) -> None:
+        source = (
+            knowledge_base if knowledge_base is not None else self.knowledge_base_path
+        )
         if source is None:
             raise ValueError("Knowledge entries are required to rebuild the index")
         rows = self._read_rows(source)
@@ -97,13 +113,20 @@ class TicketRetriever:
         missing_indices: list[int] = []
         for index, row in enumerate(rows):
             cached_entry = previous.get(row.id)
-            if cached_entry and cached_entry.get("fingerprint") == self._fingerprint(row):
-                embeddings[index] = np.asarray(cached_entry["embedding"], dtype=np.float32)
+            if cached_entry and cached_entry.get("fingerprint") == self._fingerprint(
+                row
+            ):
+                embeddings[index] = np.asarray(
+                    cached_entry["embedding"], dtype=np.float32
+                )
             else:
                 missing_indices.append(index)
         if missing_indices:
             new_vectors = encode_texts(
-                [correct_common_typos(rows[index].message) for index in missing_indices],
+                [
+                    correct_common_typos(rows[index].message)
+                    for index in missing_indices
+                ],
                 self.encoder,
             )
             for index, vector in zip(missing_indices, new_vectors, strict=True):
@@ -141,14 +164,15 @@ class TicketRetriever:
         if not message.strip():
             return []
         indexes = [
-            index for index, row in enumerate(self.rows)
+            index
+            for index, row in enumerate(self.rows)
             if category is None or row.category == category
         ]
         if not indexes:
             return []
         query = encode_texts([correct_common_typos(message)], self.encoder)[0]
         scores = self.embeddings[indexes] @ query
-        order = np.argsort(scores)[::-1][:max(top_k, 0)]
+        order = np.argsort(scores)[::-1][: max(top_k, 0)]
         return [
             KnowledgeMatch(
                 id=self.rows[indexes[position]].id,

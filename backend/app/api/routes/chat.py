@@ -19,7 +19,12 @@ router = APIRouter(tags=["chat"])
 
 @router.post("/chat", response_model=ChatResponse)
 @limiter.limit("20/minute")
-def chat(request: Request, payload: ChatRequest, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def chat(
+    request: Request,
+    payload: ChatRequest,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     del request
     try:
         return process_chat(db, user, payload.message, payload.conversation_id)
@@ -28,15 +33,16 @@ def chat(request: Request, payload: ChatRequest, user: User = Depends(get_curren
 
 
 @router.get("/conversations", response_model=list[ConversationSummary])
-def conversations(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def conversations(
+    user: User = Depends(get_current_user), db: Session = Depends(get_db)
+):
     rows = db.scalars(
         select(Conversation)
         .where(Conversation.user_id == user.id)
         .order_by(Conversation.created_at.desc())
     ).all()
     return [
-        {"id": row.id, "title": row.title, "updated_at": row.updated_at}
-        for row in rows
+        {"id": row.id, "title": row.title, "updated_at": row.updated_at} for row in rows
     ]
 
 

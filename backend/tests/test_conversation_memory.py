@@ -18,7 +18,9 @@ def test_short_confirmation_uses_the_previous_user_turn():
 def test_follow_up_can_switch_to_a_new_explicit_topic():
     history = [Message(sender="user", body="I was charged twice")]
 
-    follow_up = resolve_follow_up("what about refunds?", history, current_topic="Payment Issue")
+    follow_up = resolve_follow_up(
+        "what about refunds?", history, current_topic="Payment Issue"
+    )
 
     assert "I was charged twice" in follow_up.query
     assert follow_up.selected_category == "Refund"

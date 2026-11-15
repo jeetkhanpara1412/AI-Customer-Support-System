@@ -47,7 +47,13 @@ def enforce_email_limit(email: str, action: str) -> None:
             if attempts == 1:
                 store.expire(key, 60)
         except Exception as exc:
-            logger.bind(exception=type(exc).__name__, action=action).error("Authentication rate-limit storage unavailable")
-            raise HTTPException(status_code=503, detail="Authentication temporarily unavailable") from exc
+            logger.bind(exception=type(exc).__name__, action=action).error(
+                "Authentication rate-limit storage unavailable"
+            )
+            raise HTTPException(
+                status_code=503, detail="Authentication temporarily unavailable"
+            ) from exc
     if attempts > 5:
-        raise HTTPException(status_code=429, detail="Too many requests; please try again later")
+        raise HTTPException(
+            status_code=429, detail="Too many requests; please try again later"
+        )

@@ -9,7 +9,9 @@ class DecisionEngine:
         self.answer_similarity = answer_similarity
         self.clarify_confidence = clarify_confidence
 
-    def decide(self, classifier_confidence: float, similarity_score: float, category: str = "") -> str:
+    def decide(
+        self, classifier_confidence: float, similarity_score: float, category: str = ""
+    ) -> str:
         normalized_category = category.casefold()
         if normalized_category == "security / fraud":
             return "fallback"

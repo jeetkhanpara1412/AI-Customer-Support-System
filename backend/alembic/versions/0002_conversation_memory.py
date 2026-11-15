@@ -1,4 +1,5 @@
 """Persist conversation topic and pending clarification options."""
+
 import sqlalchemy as sa
 
 from alembic import op
@@ -10,8 +11,12 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column("conversations", sa.Column("current_topic", sa.String(64), nullable=True))
-    op.add_column("conversations", sa.Column("pending_clarification", sa.JSON(), nullable=True))
+    op.add_column(
+        "conversations", sa.Column("current_topic", sa.String(64), nullable=True)
+    )
+    op.add_column(
+        "conversations", sa.Column("pending_clarification", sa.JSON(), nullable=True)
+    )
 
 
 def downgrade() -> None:

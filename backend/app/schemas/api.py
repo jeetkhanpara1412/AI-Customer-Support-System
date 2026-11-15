@@ -20,8 +20,14 @@ class RegisterRequest(BaseModel):
     @field_validator("password")
     @classmethod
     def password_policy(cls, value: str) -> str:
-        if not re.search(r"[a-z]", value) or not re.search(r"[A-Z]", value) or not re.search(r"\d", value):
-            raise ValueError("Password must include uppercase, lowercase, and numeric characters")
+        if (
+            not re.search(r"[a-z]", value)
+            or not re.search(r"[A-Z]", value)
+            or not re.search(r"\d", value)
+        ):
+            raise ValueError(
+                "Password must include uppercase, lowercase, and numeric characters"
+            )
         return value
 
     @field_validator("name")
@@ -59,7 +65,9 @@ class ChatRequest(BaseModel):
     @field_validator("message")
     @classmethod
     def clean_message(cls, value: str) -> str:
-        value = "".join(char for char in value if char in "\n\t" or ord(char) >= 32).strip()
+        value = "".join(
+            char for char in value if char in "\n\t" or ord(char) >= 32
+        ).strip()
         if not value:
             raise ValueError("Message cannot be blank")
         return value
@@ -72,7 +80,15 @@ class ChatResponse(BaseModel):
     category: str
     confidence: float
     similarity: float
-    mode: Literal["matched", "default", "fallback", "clarify", "greeting", "thanks", "out_of_scope"]
+    mode: Literal[
+        "matched",
+        "default",
+        "fallback",
+        "clarify",
+        "greeting",
+        "thanks",
+        "out_of_scope",
+    ]
     escalated: bool
     ticket_id: int | None = None
     options: list[str] = Field(default_factory=list)
