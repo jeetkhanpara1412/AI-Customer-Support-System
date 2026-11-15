@@ -1,17 +1,39 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
-*.log
-*.csv.tmp
-.env
+*.pyd
 .venv/
 venv/
-.idea/
-.vscode/
+.env
+.env.*
+!.env.example
+!backend/.env.example
+!frontend/.env.example
 .pytest_cache/
 .mypy_cache/
-.coverage
+.ruff_cache/
+
+# Node
+node_modules/
 dist/
-build/
-output.csv
-support_triage_log.txt
+coverage/
+
+# Docker
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Project
+backend/app/ml/artifacts/*.pkl
+backend/app/ml/artifacts/*.joblib
+backend/app/ml/artifacts/*.json
+backend/.coverage
+backend/.pytest_cache/
+frontend/dist/
+*.db
+*.sqlite
+*.sqlite3
+certs/
