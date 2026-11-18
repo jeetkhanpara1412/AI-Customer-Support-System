@@ -77,7 +77,19 @@ The Vite development server proxies `/api` and `/ws` to `http://localhost:8000`.
 
 ### GitHub Codespaces
 
-The configured Dev Container provides Python 3.12, Node 20, and forwards ports 5173 and 8000. After the container installs the backend and frontend dependencies, start PostgreSQL and Redis, then follow the local backend and frontend commands above.
+The configured Dev Container provides Python 3.12 and Node 20, forwards ports 5173 and 8000, installs dependencies, migrates SQLite, and trains the model. Development uses SQLite and in-memory caching/rate limiting unless a Redis/PostgreSQL service is explicitly configured.
+
+To start both services manually, run:
+
+```bash
+./scripts/dev.sh
+# npm shortcut
+npm run dev
+# Make shortcut
+make dev
+```
+
+The script starts FastAPI on `0.0.0.0:8000` and Vite on `0.0.0.0:5173`. Open the forwarded frontend port to use the app.
 
 ## API overview
 

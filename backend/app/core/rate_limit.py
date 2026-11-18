@@ -28,7 +28,11 @@ _settings = get_settings()
 limiter = Limiter(
     key_func=rate_limit_key,
     default_limits=["120/minute"],
-    storage_uri="memory://" if _settings.env.lower() == "test" else _settings.redis_url,
+    storage_uri=(
+        "memory://"
+        if _settings.env.lower() in {"test", "development"}
+        else _settings.redis_url
+    ),
 )
 
 
@@ -36,7 +40,7 @@ def enforce_email_limit(email: str, action: str) -> None:
     settings = get_settings()
     hashed_email = hashlib.sha256(email.lower().encode()).hexdigest()
     key = f"auth:{action}:{hashed_email}"
-    if settings.env.lower() == "test":
+    if settings.env.lower() in {"test", "development"}:
         with _local_email_lock:
             _local_email_attempts[key] = _local_email_attempts.get(key, 0) + 1
             attempts = _local_email_attempts[key]

@@ -23,8 +23,26 @@ from app.services.ticket_service import create_escalation_ticket
 _lock = threading.RLock()
 _classifier: SupportCategoryClassifier | None = None
 _retriever: TicketRetriever | None = None
-_cache = Redis.from_url(
-    get_settings().redis_url, socket_connect_timeout=1, socket_timeout=1
+
+
+class _MemoryCache:
+    def __init__(self) -> None:
+        self._values: dict[str, str] = {}
+
+    def get(self, key: str) -> str | None:
+        return self._values.get(key)
+
+    def setex(self, key: str, _ttl: int, value: str) -> None:
+        self._values[key] = value
+
+
+_settings = get_settings()
+_cache = (
+    _MemoryCache()
+    if _settings.env.lower() in {"test", "development"}
+    else Redis.from_url(
+        _settings.redis_url, socket_connect_timeout=1, socket_timeout=1
+    )
 )
 
 
