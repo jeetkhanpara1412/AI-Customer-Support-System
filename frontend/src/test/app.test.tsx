@@ -7,6 +7,7 @@ import { AuthPage } from '../pages/AuthPage'
 import { ChatBubble, ChatPage } from '../pages/ChatPage'
 import { StatCard } from '../pages/AdminPage'
 import { DataTable } from '../components/DataTable'
+import { Layout } from '../components/Layout'
 import { ProtectedRoute } from '../components/ProtectedRoute'
 import { useAuthStore } from '../store/auth'
 
@@ -125,6 +126,25 @@ describe('customer support UI', () => {
     await waitFor(() =>
       expect(screen.getByText('Chat page')).toBeInTheDocument(),
     )
+  })
+
+  it('shows the admin shortcut and role badge only for administrators', async () => {
+    useAuthStore.setState({
+      accessToken: 'token',
+      user: { id: 2, email: 'admin@example.com', name: 'Admin User', role: 'admin' },
+    })
+    const adminView = renderWithRouter(<Layout />)
+    expect(screen.getByRole('link', { name: 'Admin' })).toBeInTheDocument()
+    fireEvent.click(screen.getByLabelText('User menu for Admin User'))
+    expect(screen.getByText('Administrator')).toBeInTheDocument()
+    adminView.unmount()
+
+    useAuthStore.setState({
+      accessToken: 'token',
+      user: { id: 3, email: 'user@example.com', name: 'Customer', role: 'user' },
+    })
+    renderWithRouter(<Layout />)
+    expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument()
   })
 
   it('shows category, confidence, and escalation badges on a chat bubble', () => {

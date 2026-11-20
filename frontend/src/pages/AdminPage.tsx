@@ -6,6 +6,10 @@ import { Link, useLocation } from 'react-router-dom'
 import { z } from 'zod'
 
 import { api, type KnowledgeEntry, type Ticket, type User } from '../api/client'
+import { categoryClassName } from '../components/categoryStyles'
+import { Badge, Button, Skeleton, StatCard, Toast } from '../components/ui'
+
+export { StatCard }
 
 const entrySchema = z.object({
   message: z.string().trim().min(3, 'Enter at least 3 characters').max(1000),
@@ -74,21 +78,25 @@ export function AdminPage() {
         </strong>
         <nav className="mt-8 space-y-1" aria-label="Admin navigation">
           {[
-            ['/admin', 'Dashboard'],
-            ['/admin/tickets', 'Tickets'],
-            ['/admin/knowledge', 'Knowledge base'],
-            ['/admin/users', 'Users'],
-          ].map(([to, label]) => (
+            ['/admin', 'Dashboard', '◧'],
+            ['/admin/tickets', 'Tickets', '▤'],
+            ['/admin/knowledge', 'Knowledge base', '✧'],
+            ['/admin/users', 'Users', '♙'],
+          ].map(([to, label, icon]) => (
             <Link
               className={`admin-nav-link ${pathname === to ? 'admin-nav-active' : ''}`}
               key={to}
               to={to}
               onClick={() => setSidebarOpen(false)}
             >
+              <span className="admin-nav-icon" aria-hidden="true">{icon}</span>
               {label}
             </Link>
           ))}
         </nav>
+        <Link className="admin-back-link" to="/chat">
+          ← Back to chat
+        </Link>
       </aside>
       <section className="min-w-0 flex-1">
         <header className="admin-header">
@@ -123,16 +131,16 @@ export function AdminPage() {
         </header>
         <div className="p-5 sm:p-7">
           {retrain.isError && (
-            <p className="mb-4 text-sm text-red-700" role="alert">
+            <Toast tone="error">
               Retraining failed. Review the knowledge base and retry.
-            </p>
+            </Toast>
           )}
           {retrain.isSuccess && (
-            <p className="mb-4 text-sm text-green-800" role="status">
+            <Toast tone="success">
               Model retrained with {retrain.data.data.samples} examples (
               {Math.round(retrain.data.data.accuracy * 100)}% validation
               accuracy).
-            </p>
+            </Toast>
           )}
           {view === 'dashboard' && <Dashboard />}
           {view === 'tickets' && <AdminTickets />}
@@ -143,7 +151,6 @@ export function AdminPage() {
     </div>
   )
 }
-
 function Dashboard() {
   const stats = useQuery({
     queryKey: ['admin-stats'],
@@ -155,24 +162,62 @@ function Dashboard() {
       (await api.get<Ticket[]>('/admin/tickets?page=1')).data,
   })
   if (stats.isLoading || tickets.isLoading)
-    return <p role="status">Loading dashboard…</p>
+    return (
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" role="status" aria-label="Loading dashboard">
+        <Skeleton className="h-36" />
+        <Skeleton className="h-36" />
+        <Skeleton className="h-36" />
+        <Skeleton className="h-36" />
+      </section>
+    )
   if (stats.isError || tickets.isError)
-    return <p role="alert">Dashboard data could not be loaded. Please retry.</p>
+    return (
+      <div className="empty-state" role="alert">
+        <h2>Dashboard data could not be loaded</h2>
+        <p>Check your connection and try again.</p>
+        <Button
+          onClick={() => {
+            void stats.refetch()
+            void tickets.refetch()
+          }}
+        >
+          Retry
+        </Button>
+      </div>
+    )
   const data = stats.data
   if (!data) return <p role="alert">Dashboard statistics are unavailable.</p>
   const max = Math.max(1, ...data.by_category.map((item) => item.count))
   return (
     <div className="space-y-7">
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Open tickets" value={data.open_tickets} />
-        <StatCard label="Resolved today" value={data.resolved_today} />
+        <StatCard
+          label="Open tickets"
+          value={data.open_tickets}
+          tone="amber"
+          trend="Needs attention"
+          icon="◷"
+        />
+        <StatCard
+          label="Resolved today"
+          value={data.resolved_today}
+          tone="teal"
+          trend="Today"
+          icon="✓"
+        />
         <StatCard
           label="Escalation rate"
           value={`${Math.round(data.escalation_rate * 100)}%`}
+          tone="sky"
+          trend="Across conversations"
+          icon="↗"
         />
         <StatCard
           label="Average confidence"
           value={`${Math.round(data.avg_confidence * 100)}%`}
+          tone="indigo"
+          trend="Assistant responses"
+          icon="✦"
         />
       </div>
       <div className="grid gap-5 xl:grid-cols-2">
@@ -192,15 +237,24 @@ function Dashboard() {
                     className="h-3 rounded-full bg-slate-100 dark:bg-slate-800"
                     role="img"
                     aria-label={`${item.count} tickets in ${item.category}`}
+                    title={`${item.count} tickets in ${item.category}`}
                   >
                     <div
-                      className="h-full rounded-full bg-indigo-600"
+                      className={`category-bar ${categoryClassName(item.category)}`}
                       style={{ width: `${(item.count / max) * 100}%` }}
                     />
                   </div>
                   <span className="text-sm font-semibold">{item.count}</span>
                 </div>
               ))}
+              <div className="category-legend" aria-label="Category legend">
+                {data.by_category.map((item) => (
+                  <span key={item.category}>
+                    <i className={`legend-dot ${categoryClassName(item.category)}`} />
+                    {item.category}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
         </section>
@@ -282,7 +336,10 @@ function AdminTickets() {
       {query.isLoading ? (
         <p role="status">Loading tickets…</p>
       ) : query.isError ? (
-        <p role="alert">Tickets could not be loaded.</p>
+        <div className="empty-state" role="alert">
+          <h2>Tickets could not be loaded</h2>
+          <Button onClick={() => void query.refetch()}>Retry</Button>
+        </div>
       ) : query.data?.length ? (
         <div className="space-y-3">
           {query.data.map((ticket) => (
@@ -323,8 +380,9 @@ function AdminTicket({ ticket }: { ticket: Ticket }) {
           <h2 className="font-semibold">
             #{ticket.id} · {ticket.subject}
           </h2>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
-            {ticket.category} · {ticket.priority} priority
+          <p className="ticket-meta">
+            <Badge className={categoryClassName(ticket.category)}>{ticket.category}</Badge>
+            <Badge className={`priority-${ticket.priority}`}>{ticket.priority} priority</Badge>
           </p>
         </div>
         <label className="text-sm">
@@ -470,7 +528,10 @@ function KnowledgeManager() {
       {query.isLoading ? (
         <p role="status">Loading knowledge base…</p>
       ) : query.isError ? (
-        <p role="alert">Knowledge base could not be loaded.</p>
+        <div className="empty-state" role="alert">
+          <h2>Knowledge base could not be loaded</h2>
+          <Button onClick={() => void query.refetch()}>Retry</Button>
+        </div>
       ) : query.data?.length ? (
         <div className="space-y-3">
           {query.data.map((entry) => (
@@ -480,7 +541,9 @@ function KnowledgeManager() {
             >
               <div>
                 <p className="font-semibold">{entry.message}</p>
-                <p className="text-xs text-indigo-800">{entry.category}</p>
+                <p className="mt-2">
+                  <Badge className={categoryClassName(entry.category)}>{entry.category}</Badge>
+                </p>
                 <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                   {entry.response}
                 </p>
@@ -532,7 +595,13 @@ function UserTable() {
     queryFn: async () => (await api.get<User[]>('/admin/users')).data,
   })
   if (query.isLoading) return <p role="status">Loading users…</p>
-  if (query.isError) return <p role="alert">Users could not be loaded.</p>
+  if (query.isError)
+    return (
+      <div className="empty-state" role="alert">
+        <h2>Users could not be loaded</h2>
+        <Button onClick={() => void query.refetch()}>Retry</Button>
+      </div>
+    )
   if (!query.data?.length) return <p className="panel">No users found.</p>
   return (
     <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
@@ -549,7 +618,11 @@ function UserTable() {
             <tr key={user.id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
-              <td>{user.role}</td>
+              <td>
+                <Badge className={`role-${user.role}`}>
+                  {user.role === 'admin' ? 'Administrator' : 'Customer'}
+                </Badge>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -581,28 +654,25 @@ function TicketTable({ tickets }: { tickets: Ticket[] }) {
                   #{ticket.id} {ticket.subject}
                 </Link>
               </td>
-              <td>{ticket.category}</td>
-              <td>{ticket.priority}</td>
-              <td>{ticket.status.replace('_', ' ')}</td>
+              <td>
+                <Badge className={categoryClassName(ticket.category)}>
+                  {ticket.category}
+                </Badge>
+              </td>
+              <td>
+                <Badge className={`priority-${ticket.priority}`}>
+                  {ticket.priority}
+                </Badge>
+              </td>
+              <td>
+                <Badge className={`status-${ticket.status}`}>
+                  {ticket.status.replace('_', ' ')}
+                </Badge>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
-}
-
-export function StatCard({
-  label,
-  value,
-}: {
-  label: string
-  value: string | number
-}) {
-  return (
-    <article className="panel">
-      <p className="text-sm text-slate-600 dark:text-slate-300">{label}</p>
-      <p className="mt-2 text-3xl font-bold">{value}</p>
-    </article>
   )
 }

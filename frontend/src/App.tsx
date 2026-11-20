@@ -1,13 +1,23 @@
-import { Component, lazy, Suspense, useEffect, type ReactNode } from 'react'
+import {
+  Component,
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react'
+import axios from 'axios'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { api, type User } from './api/client'
 import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { Button, Skeleton } from './components/ui'
 import { AuthPage } from './pages/AuthPage'
-import { useAuthStore } from './store/auth'
+import { useAuthStore, useUiStore } from './store/auth'
 
 const queryClient = new QueryClient()
+let sessionBootstrapRequest: Promise<boolean> | null = null
 const AdminPage = lazy(() =>
   import('./pages/AdminPage').then((module) => ({ default: module.AdminPage })),
 )
@@ -36,9 +46,9 @@ class AppErrorBoundary extends Component<
         <main className="error-page" role="alert">
           <h1>Something went wrong</h1>
           <p>The support app could not display this page.</p>
-          <button className="button-primary" type="button" onClick={() => window.location.reload()}>
-            Reload
-          </button>
+          <Button type="button" onClick={() => window.location.reload()}>
+            Try again
+          </Button>
         </main>
       )
     return this.props.children
@@ -46,77 +56,124 @@ class AppErrorBoundary extends Component<
 }
 
 function SessionBootstrap() {
+  const [apiUnavailable, setApiUnavailable] = useState(false)
+  const [retryCount, setRetryCount] = useState(0)
+  const darkMode = useUiStore((state) => state.darkMode)
+  const bootstrapped = useAuthStore((state) => state.bootstrapped)
+
   useEffect(() => {
     let active = true
-    async function bootstrap() {
-      try {
-        const { accessToken } = useAuthStore.getState()
-        if (accessToken) {
-          useAuthStore.getState().setBootstrapped(true)
-          return
-        }
-        const { data } = await api.post<{ access_token: string }>(
-          '/auth/refresh',
-          {},
-          {
-            headers: { 'X-Requested-With': 'fetch' },
-          },
-        )
-        if (!active) return
-        useAuthStore.getState().setAccessToken(data.access_token)
-        const user = await api.get<User>('/auth/me')
-        if (active) useAuthStore.getState().setUser(user.data)
-      } catch {
-        if (active) {
-          useAuthStore.getState().clearAuth()
-        }
-      } finally {
-        if (active) useAuthStore.getState().setBootstrapped(true)
-      }
-    }
-    void bootstrap()
+    useAuthStore.getState().setBootstrapped(false)
+    sessionBootstrapRequest ??= restoreSession()
+    const request = sessionBootstrapRequest
+    void request.then((unavailable) => {
+      if (!active) return
+      setApiUnavailable(unavailable)
+      useAuthStore.getState().setBootstrapped(true)
+    }).finally(() => {
+      if (sessionBootstrapRequest === request) sessionBootstrapRequest = null
+    })
     return () => {
       active = false
     }
-  }, [])
+  }, [retryCount])
 
   return (
-    <BrowserRouter>
-      <Suspense
-        fallback={
-          <p className="p-8 text-center" role="status">
-            Loading page…
-          </p>
-        }
-      >
-        <Routes>
-          <Route path="/login" element={<AuthPage mode="login" />} />
-          <Route path="/register" element={<AuthPage mode="register" />} />
-          <Route element={<ProtectedRoute />}>
-            <Route element={<Layout />}>
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/tickets" element={<TicketsPage />} />
-              <Route path="/tickets/:ticketId" element={<TicketsPage />} />
-              <Route element={<ProtectedRoute admin />}>
-                <Route path="/admin/*" element={<AdminPage />} />
-              </Route>
-            </Route>
-          </Route>
-          <Route path="/" element={<Navigate to="/chat" replace />} />
-          <Route
-            path="*"
-            element={
-              <main className="error-page">
-                <h1>Page not found</h1>
-                <p>The page you requested does not exist.</p>
-                <a className="button-primary" href="/chat">Back to support</a>
+    <div className={`app-root${darkMode ? ' dark' : ''}`}>
+      {!bootstrapped ? (
+        <main className="session-screen" role="status" aria-label="Restoring session">
+          <div className="session-card">
+            <span className="brand-mark" aria-hidden="true">S</span>
+            <Skeleton className="h-5 w-48" />
+            <Skeleton className="h-4 w-64" />
+            <p>Restoring your secure session…</p>
+          </div>
+        </main>
+      ) : apiUnavailable ? (
+        <main className="error-page session-screen" role="alert">
+          <div>
+            <h1>Support is temporarily unavailable</h1>
+            <p>We couldn’t reach the support service. Check your connection and try again.</p>
+            <Button
+              type="button"
+              onClick={() => {
+                setApiUnavailable(false)
+                setRetryCount((count) => count + 1)
+              }}
+            >
+              Retry connection
+            </Button>
+          </div>
+        </main>
+      ) : (
+        <BrowserRouter>
+          <Suspense
+            fallback={
+              <main className="session-screen" role="status">
+                <div className="session-card">
+                  <Skeleton className="h-5 w-48" />
+                  <Skeleton className="h-4 w-64" />
+                  <p>Loading page…</p>
+                </div>
               </main>
             }
-          />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+          >
+            <Routes>
+              <Route path="/login" element={<AuthPage mode="login" />} />
+              <Route path="/register" element={<AuthPage mode="register" />} />
+              <Route element={<ProtectedRoute />}>
+                <Route element={<Layout />}>
+                  <Route path="/chat" element={<ChatPage />} />
+                  <Route path="/tickets" element={<TicketsPage />} />
+                  <Route path="/tickets/:ticketId" element={<TicketsPage />} />
+                  <Route element={<ProtectedRoute admin />}>
+                    <Route path="/admin/*" element={<AdminPage />} />
+                  </Route>
+                </Route>
+              </Route>
+              <Route path="/" element={<Navigate to="/chat" replace />} />
+              <Route
+                path="*"
+                element={
+                  <main className="error-page">
+                    <h1>Page not found</h1>
+                    <p>The page you requested does not exist.</p>
+                    <a className="button-primary" href="/chat">Back to support</a>
+                  </main>
+                }
+              />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      )}
+    </div>
   )
+}
+
+async function restoreSession(): Promise<boolean> {
+  try {
+    const { accessToken, user } = useAuthStore.getState()
+    if (accessToken && user) return false
+    if (!accessToken) {
+      const { data } = await api.post<{ access_token: string }>(
+        '/auth/refresh',
+        {},
+        {
+          headers: { 'X-Requested-With': 'fetch' },
+        },
+      )
+      useAuthStore.getState().setAccessToken(data.access_token)
+    }
+    const currentUser = await api.get<User>('/auth/me')
+    useAuthStore.getState().setUser(currentUser.data)
+    return false
+  } catch (error) {
+    useAuthStore.getState().clearAuth()
+    return (
+      axios.isAxiosError(error) &&
+      (!error.response || error.response.status >= 500)
+    )
+  }
 }
 
 export default function App() {

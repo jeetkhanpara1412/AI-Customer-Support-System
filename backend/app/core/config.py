@@ -1,12 +1,15 @@
 from functools import lru_cache
 
-from pydantic import field_validator, model_validator
+from pydantic import AliasChoices, Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+        populate_by_name=True,
     )
 
     database_url: str = "postgresql+psycopg://postgres:postgres@localhost:5432/app"
@@ -19,8 +22,18 @@ class Settings(BaseSettings):
     answer_confidence_threshold: float = 0.60
     answer_similarity_threshold: float = 0.45
     clarify_confidence_threshold: float = 0.35
-    first_admin_email: str | None = None
-    first_admin_password: str | None = None
+    admin_email: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("ADMIN_EMAIL", "FIRST_ADMIN_EMAIL"),
+    )
+    admin_password: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("ADMIN_PASSWORD", "FIRST_ADMIN_PASSWORD"),
+    )
+    admin_name: str = "Support Administrator"
+    demo_user_email: str | None = None
+    demo_user_password: str | None = None
+    demo_user_name: str = "Demo Customer"
 
     @field_validator("cors_origins", mode="before")
     @classmethod

@@ -16,11 +16,11 @@ def require(condition: bool, message: str) -> None:
 
 
 async def main() -> None:
-    admin_email = os.environ.get("FIRST_ADMIN_EMAIL", "")
-    admin_password = os.environ.get("FIRST_ADMIN_PASSWORD", "")
+    admin_email = os.environ.get("ADMIN_EMAIL", "")
+    admin_password = os.environ.get("ADMIN_PASSWORD", "")
     require(
         bool(admin_email and admin_password),
-        "FIRST_ADMIN_EMAIL and FIRST_ADMIN_PASSWORD must be set",
+        "ADMIN_EMAIL and ADMIN_PASSWORD must be set",
     )
     async with httpx.AsyncClient(base_url=BASE_URL, timeout=60) as client:
         email = f"smoke-{uuid4().hex}@example.com"
@@ -43,6 +43,15 @@ async def main() -> None:
         require(user_login.status_code == 200, "User login failed")
         user_token = user_login.json()["access_token"]
         user_headers = {"Authorization": f"Bearer {user_token}"}
+        user_me = await client.get("/api/auth/me", headers=user_headers)
+        require(
+            user_me.status_code == 200 and user_me.json()["role"] == "user",
+            "Customer session role was not returned",
+        )
+        forbidden_stats = await client.get(
+            "/api/admin/stats", headers=user_headers
+        )
+        require(forbidden_stats.status_code == 403, "Customer accessed admin stats")
 
         regular_chat = await client.post(
             "/api/chat",
@@ -95,6 +104,11 @@ async def main() -> None:
             admin_headers = {
                 "Authorization": f"Bearer {admin_login.json()['access_token']}"
             }
+            admin_me = await client.get("/api/auth/me", headers=admin_headers)
+            require(
+                admin_me.status_code == 200 and admin_me.json()["role"] == "admin",
+                "Seeded administrator role was not returned",
+            )
             ticket_list = await client.get(
                 "/api/admin/tickets?priority=high&page=1", headers=admin_headers
             )
@@ -131,6 +145,41 @@ async def main() -> None:
             require(
                 stats.status_code == 200 and "open_tickets" in stats.json(),
                 "Admin stats unavailable",
+            )
+            knowledge = await client.get(
+                "/api/admin/knowledge", headers=admin_headers
+            )
+            require(knowledge.status_code == 200, "Admin knowledge base unavailable")
+            knowledge_entry = await client.post(
+                "/api/admin/knowledge",
+                headers=admin_headers,
+                json={
+                    "message": "Smoke test knowledge example",
+                    "category": "General Inquiry",
+                    "response": "This temporary example is used by the smoke test.",
+                },
+            )
+            require(knowledge_entry.status_code == 201, "Knowledge add failed")
+            knowledge_id = knowledge_entry.json()["id"]
+            knowledge_update = await client.put(
+                f"/api/admin/knowledge/{knowledge_id}",
+                headers=admin_headers,
+                json={
+                    "message": "Updated smoke test example",
+                    "category": "General Inquiry",
+                    "response": "This temporary example was updated.",
+                },
+            )
+            require(knowledge_update.status_code == 200, "Knowledge update failed")
+            knowledge_delete = await client.delete(
+                f"/api/admin/knowledge/{knowledge_id}", headers=admin_headers
+            )
+            require(knowledge_delete.status_code == 204, "Knowledge delete failed")
+            users = await client.get("/api/admin/users", headers=admin_headers)
+            require(
+                users.status_code == 200
+                and any(item["email"] == email for item in users.json()),
+                "Admin user listing failed",
             )
             retrained = await client.post("/api/admin/retrain", headers=admin_headers)
             require(

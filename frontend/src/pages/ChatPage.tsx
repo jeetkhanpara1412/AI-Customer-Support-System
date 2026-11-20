@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
 import { api, type ChatResult } from '../api/client'
+import { categoryClassName } from '../components/categoryStyles'
+import { Chip, ShieldIcon } from '../components/ui'
 import { useAuthStore } from '../store/auth'
 
 const chatSchema = z.object({
@@ -279,7 +281,10 @@ export function ChatPage() {
           </p>
         ) : conversations.isError ? (
           <p role="alert" className="mt-3 text-sm">
-            History could not be loaded.
+            History could not be loaded.{' '}
+            <button type="button" className="text-indigo-700 underline" onClick={() => void conversations.refetch()}>
+              Retry
+            </button>
           </p>
         ) : (
           <ul className="mt-2 space-y-1">
@@ -325,6 +330,11 @@ export function ChatPage() {
           >
             My tickets
           </Link>
+          {user?.role === 'admin' && (
+            <Link className="sidebar-admin-link" to="/admin">
+              <ShieldIcon /> Admin area
+            </Link>
+          )}
         </div>
       </aside>
       <section className="min-w-0 flex-1">
@@ -350,6 +360,11 @@ export function ChatPage() {
           >
             {connection === 'connected' ? 'Live' : 'Reconnecting'}
           </span>
+          {user?.role === 'admin' && (
+            <Link className="chat-admin-link" to="/admin">
+              <ShieldIcon /> Admin
+            </Link>
+          )}
         </header>
         <div className="chat-content">
           <div className="chat-messages" aria-live="polite">
@@ -360,18 +375,20 @@ export function ChatPage() {
                   Send a message and our support assistant will get started.
                 </p>
                 <div className="mt-4 flex flex-wrap justify-center gap-2">
-                  {['Hi', 'I was charged twice', 'Someone hacked my account'].map(
-                    (suggestion) => (
-                      <button
+                  {[
+                    ['Hi', 'indigo'],
+                    ['I was charged twice', 'teal'],
+                    ['Someone hacked my account', 'rose'],
+                  ].map(([suggestion, tone]) => (
+                      <Chip
                         type="button"
-                        className="button-secondary"
+                        className={`suggestion-chip suggestion-${tone}`}
                         key={suggestion}
                         onClick={() => form.setValue('message', suggestion)}
                       >
                         {suggestion}
-                      </button>
-                    ),
-                  )}
+                      </Chip>
+                  ))}
                 </div>
               </div>
             )}
@@ -394,7 +411,16 @@ export function ChatPage() {
           )}
           {mutation.isError && (
             <p className="mb-2 text-sm text-red-700" role="alert">
-              Message could not be sent. Please retry.
+              Message could not be sent.{' '}
+              <button
+                type="button"
+                className="text-indigo-700 underline"
+                onClick={() => {
+                  if (mutation.variables) mutation.mutate(mutation.variables)
+                }}
+              >
+                Retry
+              </button>
             </p>
           )}
           <form
@@ -460,23 +486,32 @@ export function ChatBubble({ line }: { line: ChatLine }) {
     <article
       className={`chat-line ${line.role === 'user' ? 'chat-line-user' : ''}`}
     >
-      <div className={bubbleClass}>
-        {line.role === 'agent' && (
-          <p className="mb-1 text-xs font-semibold">Support agent</p>
-        )}
-        <p className="whitespace-pre-wrap">{line.text}</p>
-      </div>
-      {line.category && (
-        <div className="mt-2 flex flex-wrap gap-2">
-          <span className="badge badge-primary">{line.category}</span>
-          <span className="badge badge-neutral">
-            {Math.round((line.confidence ?? 0) * 100)}% confidence
-          </span>
-          {line.escalated && (
-            <span className="badge badge-warning">Escalated to human</span>
-          )}
-        </div>
+      {line.role === 'assistant' && (
+        <span className="bot-avatar" aria-hidden="true">✦</span>
       )}
+      <div className="chat-message-group">
+        <div
+          className={`${bubbleClass} ${line.category ? categoryClassName(line.category) : ''}`}
+        >
+          {line.role === 'agent' && (
+            <p className="mb-1 text-xs font-semibold">Support agent</p>
+          )}
+          <p className="whitespace-pre-wrap">{line.text}</p>
+        </div>
+        {line.category && (
+          <div className="mt-2 flex flex-wrap gap-2">
+            <span className={`badge ${categoryClassName(line.category)}`}>
+              {line.category}
+            </span>
+            <span className="badge badge-neutral">
+              {Math.round((line.confidence ?? 0) * 100)}% confidence
+            </span>
+            {line.escalated && (
+              <span className="badge badge-warning">Escalated to human</span>
+            )}
+          </div>
+        )}
+      </div>
     </article>
   )
 }

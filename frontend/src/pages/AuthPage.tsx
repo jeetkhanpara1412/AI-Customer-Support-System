@@ -89,7 +89,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
         </p>
       </aside>
       <section className="auth-form-panel">
-        <div className="panel w-full max-w-[380px]">
+        <div className="panel auth-card">
           <h1 className="mb-2 text-2xl font-bold">
             {isRegister ? 'Create your account' : 'Welcome back'}
           </h1>
@@ -98,6 +98,19 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
               ? 'Create an account to start a support conversation.'
               : 'Sign in to continue to your support chat.'}
           </p>
+          {!isRegister && import.meta.env.VITE_APP_ENV === 'development' && (
+            <aside className="demo-hint mb-5" aria-label="Demo accounts">
+              <strong>Demo accounts</strong>
+              <p>
+                Admin: {import.meta.env.VITE_DEMO_ADMIN_EMAIL} /{' '}
+                {import.meta.env.VITE_DEMO_ADMIN_PASSWORD}
+              </p>
+              <p>
+                Customer: {import.meta.env.VITE_DEMO_USER_EMAIL} /{' '}
+                {import.meta.env.VITE_DEMO_USER_PASSWORD}
+              </p>
+            </aside>
+          )}
           <form
             className="space-y-4"
             onSubmit={form.handleSubmit((values) => mutation.mutate(values))}
@@ -161,6 +174,15 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
             {mutation.isError && (
               <p className="text-sm text-red-700" role="alert">
                 Unable to {mode}. Check your details and try again.
+                {mutation.variables && (
+                  <button
+                    className="ml-2 underline"
+                    type="button"
+                    onClick={() => mutation.mutate(mutation.variables)}
+                  >
+                    Retry
+                  </button>
+                )}
               </p>
             )}
             <button

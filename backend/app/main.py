@@ -13,9 +13,10 @@ from app.core.config import get_settings
 from app.core.logging import configure_logging, logger
 from app.core.rate_limit import limiter
 from app.db.base import Base
-from app.db.models import KnowledgeEntry, User
+from app.db.models import KnowledgeEntry
 from app.db.session import SessionLocal, engine
 from app.ml.train import DATA_PATH
+from app.services.bootstrap import seed_users
 from app.services.chat_service import initialize_ml
 
 
@@ -24,6 +25,9 @@ async def lifespan(_: FastAPI):
     if get_settings().env.lower() == "test":
         Base.metadata.create_all(bind=engine)
     with SessionLocal() as db:
+        settings = get_settings()
+        if settings.env.lower() == "development":
+            seed_users(db, settings)
         if db.scalar(select(KnowledgeEntry.id).limit(1)) is None and DATA_PATH.exists():
             with DATA_PATH.open(encoding="utf-8-sig", newline="") as handle:
                 for row in csv.DictReader(handle):
@@ -35,23 +39,6 @@ async def lifespan(_: FastAPI):
                         )
                     )
             db.commit()
-        settings = get_settings()
-        if settings.first_admin_email and settings.first_admin_password:
-            existing = db.scalar(
-                select(User).where(User.email == settings.first_admin_email.lower())
-            )
-            if existing is None:
-                from app.core.security import hash_password
-
-                db.add(
-                    User(
-                        email=settings.first_admin_email.lower(),
-                        full_name="Support Administrator",
-                        password_hash=hash_password(settings.first_admin_password),
-                        role="admin",
-                    )
-                )
-                db.commit()
         initialize_ml(db)
     yield
 

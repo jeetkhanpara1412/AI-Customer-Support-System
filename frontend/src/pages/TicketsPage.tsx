@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 
 import { api, type Ticket } from '../api/client'
-import { Button, EmptyState, Skeleton } from '../components/ui'
+import { categoryClassName } from '../components/categoryStyles'
+import { Badge, Button, EmptyState, Skeleton } from '../components/ui'
 
 export function TicketsPage() {
   const { ticketId } = useParams()
@@ -46,7 +47,10 @@ export function TicketsPage() {
             <div>
               <h1 className="text-2xl font-bold">{ticket.subject}</h1>
               <p className="mt-1 text-slate-600 dark:text-slate-300">
-                Ticket #{ticket.id} · {ticket.category}
+                Ticket #{ticket.id} ·{' '}
+                <Badge className={categoryClassName(ticket.category)}>
+                  {ticket.category}
+                </Badge>
               </p>
             </div>
             <TicketBadge status={ticket.status} priority={ticket.priority} />
@@ -116,16 +120,10 @@ function TicketBadge({
   status: Ticket['status']
   priority: Ticket['priority']
 }) {
-  const statusClass =
-    status === 'resolved'
-      ? 'bg-green-100 text-green-900'
-      : status === 'in_progress'
-        ? 'bg-indigo-100 text-indigo-900'
-        : 'bg-amber-100 text-amber-900'
   return (
     <div className="flex flex-wrap gap-2">
-      <span className={`badge ${statusClass}`}>{status.replace('_', ' ')}</span>
-      <span className="badge badge-neutral">{priority} priority</span>
+      <Badge className={`status-${status}`}>{status.replace('_', ' ')}</Badge>
+      <Badge className={`priority-${priority}`}>{priority} priority</Badge>
     </div>
   )
 }

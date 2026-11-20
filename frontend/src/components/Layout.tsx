@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 import { api } from '../api/client'
+import { Avatar, Badge, ShieldIcon, Toast } from './ui'
 import { useAuthStore, useUiStore } from '../store/auth'
 
 export function Layout() {
@@ -34,21 +35,26 @@ export function Layout() {
   return (
     <div className={darkMode ? 'dark min-h-screen' : 'min-h-screen'}>
       <a className="skip-link" href="#main-content">Skip to content</a>
-      <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+      <header className="app-header">
         <nav
-          className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4"
+          className="app-nav"
           aria-label="Main navigation"
         >
           <Link
-            className="font-bold text-indigo-700 dark:text-indigo-300"
+            className="brand-link"
             to="/chat"
           >
-            SupportDesk
+            <span className="brand-mark" aria-hidden="true">S</span>
+            <span>SupportDesk</span>
           </Link>
-          <div className="flex flex-wrap items-center gap-4 text-sm">
+          <div className="app-nav-links">
             <NavLink to="/chat">Chat</NavLink>
             <NavLink to="/tickets">My tickets</NavLink>
-            {user?.role === 'admin' && <NavLink to="/admin">Admin</NavLink>}
+            {user?.role === 'admin' && (
+              <NavLink className="admin-link" to="/admin">
+                <ShieldIcon /> Admin
+              </NavLink>
+            )}
             <button
               type="button"
               className="button-secondary"
@@ -57,19 +63,35 @@ export function Layout() {
             >
               {darkMode ? 'Light mode' : 'Dark mode'}
             </button>
-            <button type="button" className="button-secondary" onClick={logout}>
-              Sign out
-            </button>
+            <details className="user-menu">
+              <summary aria-label={`User menu for ${user?.name || 'account'}`}>
+                <Avatar name={user?.name || 'User'} />
+                <span className="user-menu-name">{user?.name}</span>
+              </summary>
+              <div className="user-menu-popover">
+                <strong>{user?.name}</strong>
+                <span className="user-menu-email">{user?.email}</span>
+                <Badge className={`role-${user?.role || 'user'}`}>
+                  {user?.role === 'admin' ? 'Administrator' : 'Customer'}
+                </Badge>
+                <button
+                  type="button"
+                  className="button-secondary"
+                  onClick={() => void logout()}
+                >
+                  Sign out
+                </button>
+              </div>
+            </details>
           </div>
         </nav>
       </header>
       {logoutError && (
-        <p
-          className="mx-auto max-w-6xl px-4 pt-3 text-sm text-red-700"
-          role="alert"
-        >
+        <div className="mx-auto max-w-6xl px-4 pt-3">
+          <Toast tone="error">
           {logoutError}
-        </p>
+          </Toast>
+        </div>
       )}
       <main
         id="main-content"

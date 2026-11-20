@@ -10,15 +10,15 @@
   "portsAttributes": {
     "5173": {
       "label": "Frontend",
-      "onAutoForward": "notify"
+      "onAutoForward": "openPreview"
     },
     "8000": {
       "label": "Backend API",
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "python -m pip install -r backend/requirements.txt -r backend/requirements-dev.txt && npm ci --prefix frontend && if [ ! -f backend/.env ]; then cp backend/.env.example backend/.env; fi && sed -i 's#^DATABASE_URL=.*#DATABASE_URL=sqlite:///./dev.db#' backend/.env && sed -i 's/^ENV=.*/ENV=development/' backend/.env && cd backend && alembic upgrade head && if [ ! -f app/ml/artifacts/support_classifier.joblib ]; then python -m app.ml.train; fi && FIRST_ADMIN_EMAIL=admin@example.com FIRST_ADMIN_PASSWORD='change-me-for-local-use' python scripts/seed.py",
-  "postAttachCommand": "./scripts/dev.sh",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postAttachCommand": "bash scripts/dev.sh",
   "customizations": {
     "vscode": {
       "extensions": [

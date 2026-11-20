@@ -7,10 +7,14 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    allowedHosts: true,
     proxy: {
-      '/api': process.env.BACKEND_URL || 'http://127.0.0.1:8000',
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
       '/ws': {
-        target: process.env.BACKEND_WS_URL || 'ws://127.0.0.1:8000',
+        target: 'http://localhost:8000',
         ws: true,
       },
     },

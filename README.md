@@ -38,7 +38,7 @@ Requirements: Docker Engine and the Docker Compose plugin.
 
 3. Open the app at [http://localhost](http://localhost) or [http://localhost:5173](http://localhost:5173). The API is at [http://localhost:8000](http://localhost:8000), with interactive docs at [http://localhost:8000/docs](http://localhost:8000/docs).
 
-Compose runs the database migration and seeds the first administrator before starting the API. The first admin credentials come from `FIRST_ADMIN_EMAIL` and `FIRST_ADMIN_PASSWORD`; change the example values before use. PostgreSQL, Redis, and generated model artifacts use named volumes.
+Compose runs the database migration and seeds the administrator before starting the API. Configure `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME`; development environments also seed the `DEMO_USER_*` account. Replace the safe example credentials before exposing a deployment. PostgreSQL, Redis, and generated model artifacts use named volumes.
 
 ### Optional HTTPS proxy
 
@@ -77,7 +77,7 @@ The Vite development server proxies `/api` and `/ws` to `http://localhost:8000`.
 
 ### GitHub Codespaces
 
-The configured Dev Container provides Python 3.12 and Node 20, forwards ports 5173 and 8000, installs dependencies, migrates SQLite, and trains the model. Development uses SQLite and in-memory caching/rate limiting unless a Redis/PostgreSQL service is explicitly configured.
+The configured Dev Container provides Python 3.12 and Node 20, installs dependencies, migrates SQLite, trains the model if needed, and seeds demo users on creation. On attach it starts both services and waits for the health endpoint; port 5173 opens in the preview automatically. Development uses SQLite and in-memory rate limiting so PostgreSQL and Redis are not required.
 
 To start both services manually, run:
 
@@ -138,7 +138,7 @@ npm test
 npm run build
 ```
 
-To run the end-to-end API/WebSocket smoke test against an already-running stack, export `FIRST_ADMIN_EMAIL` and `FIRST_ADMIN_PASSWORD`, then run `python backend/scripts/smoke_test.py`. The script creates a temporary user and exercises the chat, fraud escalation, ticket, admin, retraining, and WebSocket reply flows.
+To run the end-to-end API/WebSocket smoke test against an already-running stack, export `ADMIN_EMAIL` and `ADMIN_PASSWORD`, then run `python backend/scripts/smoke_test.py`. The script creates a temporary user and exercises registration, role authorization, chat, fraud escalation, tickets, admin knowledge/users, retraining, live reply, and logout.
 
 ## Configuration and security
 
@@ -158,7 +158,8 @@ To run the end-to-end API/WebSocket smoke test against an already-running stack,
 | `ANSWER_CONFIDENCE_THRESHOLD` | Backend | Minimum classifier confidence for a direct answer (default `0.60`) |
 | `ANSWER_SIMILARITY_THRESHOLD` | Backend | Minimum retrieval similarity for a direct answer (default `0.45`) |
 | `CLARIFY_CONFIDENCE_THRESHOLD` | Backend | Minimum classifier confidence before clarification rather than escalation (default `0.35`) |
-| `FIRST_ADMIN_EMAIL`, `FIRST_ADMIN_PASSWORD` | Backend / Compose | Bootstrap the first administrator |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | Backend / Compose | Bootstrap the administrator |
+| `DEMO_USER_EMAIL`, `DEMO_USER_PASSWORD`, `DEMO_USER_NAME` | Backend | Create the development-only demo customer |
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | Compose | Initialize the PostgreSQL container |
 | `VITE_API_URL` | Frontend build | HTTP API base URL |
 | `VITE_WS_URL` | Frontend build | Optional WebSocket URL |
