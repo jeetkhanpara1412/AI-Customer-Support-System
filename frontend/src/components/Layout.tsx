@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Link,
   NavLink,
@@ -16,6 +16,10 @@ export function Layout() {
   const location = useLocation()
   const [logoutError, setLogoutError] = useState('')
 
+  useEffect(() => {
+    window.localStorage.setItem('support-dark-mode', String(darkMode))
+  }, [darkMode])
+
   async function logout() {
     try {
       await api.post('/auth/logout')
@@ -29,6 +33,7 @@ export function Layout() {
 
   return (
     <div className={darkMode ? 'dark min-h-screen' : 'min-h-screen'}>
+      <a className="skip-link" href="#main-content">Skip to content</a>
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
         <nav
           className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4"
@@ -67,6 +72,7 @@ export function Layout() {
         </p>
       )}
       <main
+        id="main-content"
         className={
           location.pathname === '/chat'
             ? 'mx-auto max-w-7xl px-4 py-5'

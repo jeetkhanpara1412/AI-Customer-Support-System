@@ -33,8 +33,12 @@ class AppErrorBoundary extends Component<
   render() {
     if (this.state.failed)
       return (
-        <main className="p-8" role="alert">
-          This page could not be displayed. Reload to try again.
+        <main className="error-page" role="alert">
+          <h1>Something went wrong</h1>
+          <p>The support app could not display this page.</p>
+          <button className="button-primary" type="button" onClick={() => window.location.reload()}>
+            Reload
+          </button>
         </main>
       )
     return this.props.children
@@ -102,14 +106,10 @@ function SessionBootstrap() {
           <Route
             path="*"
             element={
-              <main className="mx-auto max-w-xl p-12 text-center">
-                <h1 className="text-3xl font-bold">Page not found</h1>
-                <a
-                  className="mt-4 inline-block text-indigo-700 underline"
-                  href="/chat"
-                >
-                  Return to support
-                </a>
+              <main className="error-page">
+                <h1>Page not found</h1>
+                <p>The page you requested does not exist.</p>
+                <a className="button-primary" href="/chat">Back to support</a>
               </main>
             }
           />

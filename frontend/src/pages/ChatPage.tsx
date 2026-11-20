@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
@@ -43,6 +43,8 @@ export function ChatPage() {
   const [typing, setTyping] = useState(false)
   const [socketError, setSocketError] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [conversationSearch, setConversationSearch] = useState('')
+  const messagesEnd = useRef<HTMLDivElement | null>(null)
   const socket = useRef<WebSocket | null>(null)
   const pendingSocketMessage = useRef<string | null>(null)
   const queryClient = useQueryClient()
@@ -50,6 +52,10 @@ export function ChatPage() {
     resolver: zodResolver(chatSchema),
     defaultValues: { message: '' },
   })
+  const messageLength = useWatch({
+    control: form.control,
+    name: 'message',
+  }).length
   const conversations = useQuery({
     queryKey: ['conversations'],
     queryFn: async () =>
@@ -94,6 +100,20 @@ export function ChatPage() {
     },
   })
   const sendRest = mutation.mutate
+
+  const deleteConversation = useMutation({
+    mutationFn: async (id: number) => api.delete(`/conversations/${id}`),
+    onSuccess: () => {
+      if (conversationId) newConversation()
+      void queryClient.invalidateQueries({ queryKey: ['conversations'] })
+    },
+  })
+
+  useEffect(() => {
+    if (typeof messagesEnd.current?.scrollIntoView === 'function') {
+      messagesEnd.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }
+  }, [lines.length, typing])
 
   useEffect(() => {
     if (!token) return
@@ -245,6 +265,14 @@ export function ChatPage() {
         <p className="mt-8 text-xs font-semibold uppercase tracking-wider text-slate-500">
           Recent
         </p>
+        <label className="sr-only" htmlFor="conversation-search">Search conversations</label>
+        <input
+          id="conversation-search"
+          type="search"
+          placeholder="Search conversations"
+          value={conversationSearch}
+          onChange={(event) => setConversationSearch(event.target.value)}
+        />
         {conversations.isLoading ? (
           <p role="status" className="mt-3 text-sm">
             Loading conversations…
@@ -255,8 +283,14 @@ export function ChatPage() {
           </p>
         ) : (
           <ul className="mt-2 space-y-1">
-            {conversations.data?.map((item) => (
-              <li key={item.id}>
+            {conversations.data
+              ?.filter((item) =>
+                item.title
+                  .toLowerCase()
+                  .includes(conversationSearch.toLowerCase()),
+              )
+              .map((item) => (
+              <li className="conversation-row" key={item.id}>
                 <button
                   className={`conversation-link ${conversationId === item.id ? 'conversation-active' : ''}`}
                   type="button"
@@ -267,8 +301,20 @@ export function ChatPage() {
                 >
                   {item.title || 'Conversation'}
                 </button>
+                <button
+                  type="button"
+                  className="conversation-delete"
+                  aria-label={`Delete ${item.title}`}
+                  onClick={() => {
+                    if (window.confirm('Delete this conversation?')) {
+                      deleteConversation.mutate(item.id)
+                    }
+                  }}
+                >
+                  Delete
+                </button>
               </li>
-            ))}
+              ))}
           </ul>
         )}
         <div className="mt-auto border-t border-slate-200 pt-4 dark:border-slate-700">
@@ -313,16 +359,31 @@ export function ChatPage() {
                 <p>
                   Send a message and our support assistant will get started.
                 </p>
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {['Hi', 'I was charged twice', 'Someone hacked my account'].map(
+                    (suggestion) => (
+                      <button
+                        type="button"
+                        className="button-secondary"
+                        key={suggestion}
+                        onClick={() => form.setValue('message', suggestion)}
+                      >
+                        {suggestion}
+                      </button>
+                    ),
+                  )}
+                </div>
               </div>
             )}
             {lines.map((line) => (
               <ChatBubble line={line} key={line.id} />
             ))}
             {(typing || mutation.isPending) && (
-              <p className="typing-indicator" role="status">
-                Support is typing…
-              </p>
+              <div className="typing-indicator" role="status" aria-label="Support is typing">
+                <span /><span /><span />
+              </div>
             )}
+            <div ref={messagesEnd} />
           </div>
           {socketError && (
             <p className="mb-2 text-sm text-red-700" role="alert">
@@ -346,12 +407,24 @@ export function ChatPage() {
             <label className="sr-only" htmlFor="chat-message">
               Message
             </label>
-            <input
+            <textarea
               id="chat-message"
-              className="min-w-0 flex-1"
+              className="chat-textarea"
               maxLength={1000}
+              rows={1}
               aria-invalid={Boolean(form.formState.errors.message)}
               placeholder="Write your message…"
+              onInput={(event) => {
+                event.currentTarget.style.height = 'auto'
+                event.currentTarget.style.height =
+                  `${Math.min(event.currentTarget.scrollHeight, 144)}px`
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  event.preventDefault()
+                  void form.handleSubmit(submit)()
+                }
+              }}
               {...form.register('message')}
             />
             <button
@@ -362,6 +435,9 @@ export function ChatPage() {
               Send
             </button>
           </form>
+          <p className="mt-1 text-right text-xs text-slate-500" aria-live="polite">
+            {messageLength}/1000
+          </p>
           {form.formState.errors.message && (
             <p className="mt-2 text-sm text-red-700" role="alert">
               {form.formState.errors.message.message}

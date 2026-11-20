@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 
 import { api, type Ticket } from '../api/client'
+import { Button, EmptyState, Skeleton } from '../components/ui'
 
 export function TicketsPage() {
   const { ticketId } = useParams()
@@ -14,9 +15,22 @@ export function TicketsPage() {
     },
   })
 
-  if (query.isLoading) return <p role="status">Loading your tickets…</p>
+  if (query.isLoading)
+    return (
+      <section className="space-y-3" role="status" aria-label="Loading tickets">
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-28 w-full" />
+        <Skeleton className="h-28 w-full" />
+      </section>
+    )
   if (query.isError)
-    return <p role="alert">Tickets could not be loaded. Please retry.</p>
+    return (
+      <EmptyState
+        title="Tickets could not be loaded"
+        description="Check your connection and try again."
+        action={<Button onClick={() => query.refetch()}>Retry</Button>}
+      />
+    )
   if (ticketId && query.data?.[0]) {
     const ticket = query.data[0]
     return (
@@ -62,7 +76,11 @@ export function TicketsPage() {
     return (
       <section>
         <h1 className="mb-6 text-2xl font-bold">My tickets</h1>
-        <div className="panel">You do not have any support tickets yet.</div>
+        <EmptyState
+          title="No support tickets"
+          description="Start a chat if you need help. A ticket may be created for human support."
+          action={<Link className="button-primary" to="/chat">Start a chat</Link>}
+        />
       </section>
     )
   return (

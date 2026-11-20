@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 import { api, type User } from '../api/client'
 import { useAuthStore } from '../store/auth'
 
@@ -38,6 +39,7 @@ const createAuthSchema = (isRegistration: boolean) =>
 
 export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
   const isRegister = mode === 'register'
+  const [showPassword, setShowPassword] = useState(false)
   const authSchema = createAuthSchema(isRegister)
   type FormValues = z.infer<typeof authSchema>
   const navigate = useNavigate()
@@ -124,13 +126,23 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
               label="Password"
               error={form.formState.errors.password?.message}
             >
-              <input
-                id="password"
-                aria-invalid={Boolean(form.formState.errors.password)}
-                type="password"
-                autoComplete={isRegister ? 'new-password' : 'current-password'}
-                {...form.register('password')}
-              />
+              <div className="password-field">
+                <input
+                  id="password"
+                  aria-invalid={Boolean(form.formState.errors.password)}
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete={isRegister ? 'new-password' : 'current-password'}
+                  {...form.register('password')}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  onClick={() => setShowPassword((value) => !value)}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </Field>
             {isRegister && (
               <Field

@@ -29,6 +29,8 @@ interface UiState {
 }
 
 export const useUiStore = create<UiState>((set) => ({
-  darkMode: false,
+  darkMode:
+    typeof window !== 'undefined' &&
+    window.localStorage.getItem('support-dark-mode') === 'true',
   toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
 }))

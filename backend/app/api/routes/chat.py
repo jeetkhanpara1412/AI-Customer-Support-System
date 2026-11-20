@@ -76,3 +76,26 @@ def conversation_detail(
             for message in row.messages
         ],
     }
+
+
+@router.delete("/conversations/{conversation_id}", status_code=204)
+def delete_conversation(
+    conversation_id: int,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    row = db.scalar(
+        select(Conversation).where(
+            Conversation.id == conversation_id,
+            Conversation.user_id == user.id,
+        )
+    )
+    if row is None:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    if row.ticket is not None:
+        raise HTTPException(
+            status_code=409,
+            detail="Conversations with tickets cannot be deleted",
+        )
+    db.delete(row)
+    db.commit()
